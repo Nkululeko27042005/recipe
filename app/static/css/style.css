@@ -1,0 +1,838 @@
+/* =========================================================
+   RecipE — Vibrant Book Theme (Square Edges)
+   ========================================================= */
+
+:root {
+  --paper:      #fbf6ea;   /* page background */
+  --paper-2:    #f4ead2;   /* aged page */
+  --ink:        #211a17;   /* text */
+  --ink-soft:   #4a3f39;
+  --crimson:    #b8232f;   /* cover red */
+  --mustard:    #e0a106;   /* accent gold */
+  --forest:     #1f6b4a;   /* success/green */
+  --plum:       #6c2a6b;   /* secondary accent */
+  --teal:       #106a72;   /* tertiary accent */
+  --line:       #2a1f1a;   /* hard border */
+  --shadow:     4px 4px 0 0 var(--line);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Georgia", "Iowan Old Style", "Times New Roman", serif;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+/* ---------- Typography ---------- */
+h1, h2, h3, h4 {
+  font-family: "Playfair Display", "Georgia", serif;
+  letter-spacing: 0.5px;
+  margin: 0 0 .5em;
+  color: var(--ink);
+  border-bottom: 3px solid var(--line);
+  padding-bottom: .25em;
+}
+
+h1 { font-size: 2.4rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.35rem; }
+
+a {
+  color: var(--crimson);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+a:hover { color: var(--plum); }
+
+/* ---------- Layout ---------- */
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* ---------- Header / Nav (bookshelf bar) ---------- */
+.site-header {
+  background: var(--crimson);
+  color: var(--paper);
+  border-bottom: 4px solid var(--line);
+  padding: 1rem 0;
+}
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.site-header .brand {
+  font-family: "Playfair Display", serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--paper);
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+.site-header .brand::before {
+  content: "❦ ";   /* fleuron / book ornament */
+  color: var(--mustard);
+}
+.site-nav a {
+  color: var(--paper);
+  margin-left: 1rem;
+  text-decoration: none;
+  border: 2px solid transparent;
+  padding: .25rem .5rem;
+}
+.site-nav a:hover {
+  background: var(--mustard);
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+/* ---------- Cards: "pages" of the book ---------- */
+.card {
+  background: var(--paper-2);
+  border: 3px solid var(--line);
+  box-shadow: var(--shadow);
+  padding: 1.25rem 1.25rem 1.25rem 1.75rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+/* page spine on the left of every card */
+.card::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 12px;
+  background: var(--crimson);
+  border-right: 2px solid var(--line);
+}
+.card--forest::before { background: var(--forest); }
+.card--plum::before   { background: var(--plum); }
+.card--teal::before   { background: var(--teal); }
+.card--mustard::before{ background: var(--mustard); }
+
+/* ---------- Bookmark ribbon (for featured/top-liked cards) ---------- */
+.card--ribbon::after {
+  content: "";
+  position: absolute;
+  top: -4px; right: 20px;
+  width: 26px; height: 46px;
+  background: var(--plum);
+  border: 2px solid var(--line);
+  border-top: none;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 80%, 0 100%);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  padding: .55rem 1rem;
+  background: var(--mustard);
+  color: var(--ink);
+  border: 3px solid var(--line);
+  font-family: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 0 var(--line);
+  transition: transform .05s ease;
+}
+.btn:hover { transform: translate(-1px, -1px); }
+.btn:active { transform: translate(2px, 2px); box-shadow: none; }
+
+.btn--primary { background: var(--crimson); color: var(--paper); }
+.btn--green   { background: var(--forest);  color: var(--paper); }
+.btn--ghost   { background: transparent;    color: var(--ink); }
+.btn--danger  { background: var(--plum);    color: var(--paper); }
+.btn--sm      { padding: .3rem .6rem; font-size: .85rem; }
+
+/* ---------- Forms ---------- */
+input, textarea, select {
+  width: 100%;
+  padding: .6rem .7rem;
+  border: 3px solid var(--line);
+  background: #fffdf7;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  box-shadow: inset 2px 2px 0 0 rgba(0,0,0,.05);
+}
+input:focus, textarea:focus, select:focus {
+  outline: 3px solid var(--mustard);
+  outline-offset: 0;
+}
+
+label {
+  display: block;
+  font-weight: 700;
+  margin: .5rem 0 .25rem;
+  letter-spacing: .3px;
+}
+
+/* ---------- Tags / Categories (like index tabs) ---------- */
+.tag {
+  display: inline-block;
+  padding: .15rem .55rem;
+  border: 2px solid var(--line);
+  background: var(--paper);
+  font-size: .8rem;
+  margin-right: .35rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+.tag--crimson { background: var(--crimson); color: var(--paper); }
+.tag--forest  { background: var(--forest);  color: var(--paper); }
+.tag--plum    { background: var(--plum);    color: var(--paper); }
+.tag--teal    { background: var(--teal);    color: var(--paper); }
+
+/* ---------- Ingredient / Step lists (numbered as "Steps 1, 2…") ---------- */
+.steps { list-style: none; padding: 0; counter-reset: step; }
+.steps li {
+  counter-increment: step;
+  padding: 1rem 1rem 1rem 4rem;
+  border: 3px solid var(--line);
+  background: var(--paper);
+  margin-bottom: .75rem;
+  position: relative;
+}
+.steps li::before {
+  content: "Step " counter(step);
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3rem;
+  background: var(--crimson);
+  color: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: .85rem;
+  border-right: 3px solid var(--line);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  letter-spacing: 2px;
+}
+
+.ingredients { list-style: none; padding: 0; }
+.ingredients li {
+  border-bottom: 2px dashed var(--line);
+  padding: .35rem 0;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.ingredients li .qty { font-weight: 700; color: var(--crimson); }
+
+/* ---------- Like / Dislike / Save buttons ---------- */
+.action-bar {
+  display: flex;
+  gap: .5rem;
+  align-items: center;
+  margin-top: .75rem;
+  border-top: 2px solid var(--line);
+  padding-top: .75rem;
+}
+.action-bar .count {
+  font-weight: 700;
+  min-width: 1.5rem;
+  text-align: center;
+}
+.btn--like.is-active   { background: var(--forest); color: var(--paper); }
+.btn--dislike.is-active{ background: var(--plum);   color: var(--paper); }
+.btn--save.is-active   { background: var(--mustard); }
+
+/* ---------- Grid ---------- */
+.grid { display: grid; gap: 1.25rem; }
+.grid--2 { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+.grid--3 { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+
+/* ---------- Section headings (like chapter titles) ---------- */
+.chapter {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  margin: 2rem 0 1rem;
+}
+.chapter h2 { margin: 0; border-bottom: none; }
+.chapter::after {
+  content: "";
+  flex: 1;
+  height: 3px;
+  background: var(--line);
+}
+
+/* ---------- Comment block ---------- */
+.comment {
+  border-left: 6px solid var(--teal);
+  background: var(--paper);
+  border-top: 2px solid var(--line);
+  border-right: 2px solid var(--line);
+  border-bottom: 2px solid var(--line);
+  padding: .75rem 1rem;
+  margin-bottom: .75rem;
+}
+.comment .meta {
+  font-size: .8rem;
+  color: var(--ink-soft);
+  letter-spacing: .5px;
+}
+.comment.reply { margin-left: 1.5rem; border-left-color: var(--mustard); }
+
+/* ---------- Footer ---------- */
+.site-footer {
+  margin-top: 3rem;
+  border-top: 4px double var(--line);
+  padding: 1.5rem;
+  text-align: center;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+.site-footer::before {
+  content: "❧ ❧ ❧";
+  display: block;
+  color: var(--crimson);
+  margin-bottom: .5rem;
+  letter-spacing: 1rem;
+}
+
+/* ---------- Utility ---------- */
+.muted   { color: var(--ink-soft); font-style: italic; }
+.center  { text-align: center; }
+.mt-1    { margin-top: .5rem; }
+.mt-2    { margin-top: 1rem; }
+.mt-3    { margin-top: 2rem; }
+.row     { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.spacer  { flex: 1; }
+.square  { border-radius: 0 !important; }  /* enforce squareness everywhere */
+
+/* =========================================================
+   RecipE — Extended styles (frontend additions)
+   ========================================================= */
+
+/* ---------- Mobile nav toggle ---------- */
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 3px solid var(--line);
+  color: var(--paper);
+  font-size: 1.2rem;
+  padding: .25rem .6rem;
+  cursor: pointer;
+}
+@media (max-width: 720px) {
+  .nav-toggle { display: inline-block; }
+  .site-nav {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    margin-top: .75rem;
+  }
+  .site-nav--open { display: flex; }
+}
+
+/* ---------- Card thumbnails ---------- */
+.card__thumb {
+  margin: -1.25rem -1.25rem 1rem -1.75rem;
+  border-bottom: 3px solid var(--line);
+  overflow: hidden;
+  max-height: 200px;
+}
+.card__thumb img {
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* ---------- Gallery ---------- */
+.gallery__item {
+  padding: 0;
+  margin: 0;
+}
+.gallery__item img {
+  display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+/* ---------- Video ---------- */
+.recipe-video {
+  display: block;
+  width: 100%;
+  max-height: 480px;
+  border: 3px solid var(--line);
+  background: #000;
+  box-shadow: var(--shadow);
+}
+
+/* ---------- Flash messages ---------- */
+.flash-stack { margin-top: 1rem; }
+.flash { padding: .75rem 1rem; }
+
+/* ---------- Toasts ---------- */
+.toast-stack {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  z-index: 1000;
+}
+.toast {
+  padding: .65rem 1rem;
+  border: 3px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity .2s ease, transform .2s ease;
+  max-width: 320px;
+}
+.toast--in { opacity: 1; transform: translateY(0); }
+.toast--success { background: var(--forest); color: var(--paper); }
+.toast--danger  { background: var(--crimson); color: var(--paper); }
+.toast--warning { background: var(--mustard); color: var(--ink); }
+.toast--info    { background: var(--plum);    color: var(--paper); }
+
+/* ---------- Dynamic list (recipe form) ---------- */
+.dynamic-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 .5rem;
+}
+.dynamic-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr auto;
+  gap: .4rem;
+  margin-bottom: .5rem;
+  align-items: start;
+}
+.dynamic-list[data-list='steps'] .dynamic-row {
+  grid-template-columns: 1fr auto;
+}
+@media (max-width: 720px) {
+  .dynamic-row { grid-template-columns: 1fr 1fr; }
+}
+
+/* Steps edit list gets numbered "Step N" labels via CSS counter */
+.steps-edit {
+  counter-reset: step;
+  list-style: none;
+  padding: 0;
+}
+.steps-edit .dynamic-row {
+  counter-increment: step;
+  position: relative;
+  padding-left: 3.5rem;
+}
+.steps-edit .dynamic-row::before {
+  content: "Step " counter(step);
+  position: absolute;
+  left: 0; top: 0;
+  width: 3rem;
+  height: 100%;
+  background: var(--crimson);
+  color: var(--paper);
+  border: 3px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: .75rem;
+  text-align: center;
+  writing-mode: vertical-rl;
+  letter-spacing: 2px;
+}
+
+/* ---------- Existing images on edit ---------- */
+.existing-image {
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  text-align: center;
+}
+.existing-image img {
+  display: block;
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-bottom: 3px solid var(--line);
+}
+.existing-image span {
+  display: block;
+  padding: .35rem;
+  font-size: .85rem;
+}
+
+/* ---------- Comments ---------- */
+.comment-list { margin-top: 1rem; }
+.comment-form textarea { margin-bottom: .5rem; }
+.comment-replies { margin-top: .75rem; }
+.comment-body { white-space: pre-wrap; word-wrap: break-word; }
+
+/* ---------- Filters ---------- */
+.filters input { flex: 1; min-width: 160px; }
+
+/* ---------- Pagination ---------- */
+.pagination { justify-content: center; gap: .75rem; }
+
+/* ---------- Profile ---------- */
+.profile-avatar img,
+.avatar-placeholder {
+  width: 96px;
+  height: 96px;
+  border: 3px solid var(--line);
+  box-shadow: var(--shadow);
+  object-fit: cover;
+}
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mustard);
+  color: var(--ink);
+  font-size: 2.4rem;
+  font-weight: 900;
+  font-family: "Playfair Display", serif;
+}
+.profile-card { padding-left: 1.75rem; }
+
+/* ---------- Avatar upload (settings) ---------- */
+.avatar-upload {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  margin: .5rem 0 .5rem;
+}
+.avatar-upload__preview img,
+.avatar-upload__preview .avatar-placeholder {
+  width: 96px;
+  height: 96px;
+  border: 3px solid var(--line);
+  box-shadow: var(--shadow);
+  object-fit: cover;
+}
+.avatar-upload__controls {
+  flex: 1;
+  padding-top: .25rem;
+}
+
+/* ---------- Navbar avatar ---------- */
+.nav-avatar {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+}
+.nav-avatar img,
+.nav-avatar .avatar-placeholder--sm {
+  width: 28px;
+  height: 28px;
+  border: 2px solid var(--line);
+  object-fit: cover;
+  vertical-align: middle;
+}
+.avatar-placeholder--sm {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--mustard);
+  color: var(--ink);
+  font-size: .85rem;
+  font-weight: 900;
+  font-family: "Playfair Display", serif;
+}
+
+/* ---------- Divider ---------- */
+.divider {
+  border: none;
+  border-top: 3px double var(--line);
+  margin: 1.5rem 0;
+}
+
+/* ---------- Recipe description ---------- */
+.recipe-desc {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin: .5rem 0 1.25rem;
+}
+
+/* ---------- Book-page corner fold on recipe detail ---------- */
+.recipe-detail > .chapter:first-child {
+  position: relative;
+}
+.recipe-detail > .chapter:first-child::before {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 0 40px 40px 0;
+  border-color: transparent var(--paper) transparent transparent;
+  filter: drop-shadow(-2px 2px 0 var(--line));
+}
+
+/* =========================================================
+   Dashboard — Redesigned Layout
+   ========================================================= */
+
+/* ---------- Hero banner ---------- */
+.hero {
+  border: 3px solid var(--line);
+  box-shadow: var(--shadow);
+  background: var(--crimson);
+  color: var(--paper);
+  padding: 2rem 2rem 1.5rem 2.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+.hero::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 14px;
+  background: var(--mustard);
+  border-right: 2px solid var(--line);
+}
+.hero h1 {
+  color: var(--paper);
+  border-bottom-color: rgba(255,255,255,.3);
+  margin-bottom: .35rem;
+}
+.hero .muted {
+  color: rgba(255,255,255,.8);
+  font-style: italic;
+  margin: 0;
+}
+
+/* ---------- Two-column split ---------- */
+.dashboard-split {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 1.5rem;
+  align-items: start;
+  margin-bottom: 2rem;
+}
+.dashboard-split__main { min-width: 0; }
+.dashboard-split__side {
+  position: sticky;
+  top: 1rem;
+}
+
+/* ---------- Saved items list (sidebar) ---------- */
+.saved-item {
+  border-bottom: 2px dashed var(--line);
+  padding: .55rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: .1rem;
+}
+.saved-item:last-child { border-bottom: none; }
+.saved-item a {
+  font-weight: 700;
+  font-size: .95rem;
+}
+.saved-item .muted { font-size: .8rem; }
+
+/* ---------- Rising cooks sidebar ---------- */
+.rising-user {
+  padding: .6rem 0;
+  border-bottom: 2px dashed var(--line);
+}
+.rising-user:last-child { border-bottom: none; }
+.rising-user__link {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  text-decoration: none;
+  color: var(--ink);
+  font-size: .95rem;
+  margin-bottom: .3rem;
+}
+.rising-user__link:hover { color: var(--crimson); }
+.rising-user__avatar {
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  border: 2px solid var(--line);
+}
+.rising-user__stats { display: flex; gap: .35rem; flex-wrap: wrap; }
+
+/* ---------- Empty state ---------- */
+.empty-state {
+  border: 3px dashed var(--line);
+  padding: 1.5rem 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  background: var(--paper);
+}
+.empty-state p { margin: 0 0 .75rem; color: var(--ink-soft); font-style: italic; }
+
+/* ---------- Dashboard responsive ---------- */
+@media (max-width: 860px) {
+  .dashboard-split {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-split__side {
+    position: static;
+  }
+}
+
+/* =========================================================
+   Dashboard — New Components
+   ========================================================= */
+
+/* ---------- Single-column grid helper ---------- */
+.grid--1 { grid-template-columns: 1fr; }
+
+/* ---------- Hero fame pill ---------- */
+.hero__fame {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+  padding: .55rem .85rem;
+  background: rgba(0,0,0,.25);
+  border: 2px solid rgba(255,255,255,.3);
+}
+.hero__fame-label {
+  font-weight: 700;
+  color: var(--mustard);
+  font-size: .85rem;
+  letter-spacing: .5px;
+  white-space: nowrap;
+}
+.hero__fame-link {
+  color: var(--paper) !important;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---------- Spotlight card (Recipe of the Month) ---------- */
+.spotlight-card {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 0;
+  border: 3px solid var(--line);
+  box-shadow: var(--shadow);
+  background: var(--paper-2);
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 12px;
+  background: var(--crimson);
+  border-right: 2px solid var(--line);
+}
+.spotlight-card__thumb {
+  border-right: 3px solid var(--line);
+  overflow: hidden;
+}
+.spotlight-card__thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  object-fit: cover;
+}
+.spotlight-card__body {
+  padding: 1.5rem 1.5rem 1.5rem 1.75rem;
+}
+.spotlight-card__badge {
+  display: inline-block;
+  background: var(--crimson);
+  color: var(--paper);
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: .2rem .55rem;
+  border: 2px solid var(--line);
+  margin-bottom: .65rem;
+}
+.spotlight-card__body h2 {
+  margin-bottom: .25rem;
+  border-bottom: none;
+}
+.spotlight-card__body h2 a { color: var(--ink); }
+.spotlight-card__body h2 a:hover { color: var(--crimson); }
+
+/* ---------- Dashboard duo (two equal-width side-by-side sections) ---------- */
+.dashboard-duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* ---------- Cook podium (this month's top cooks) ---------- */
+.cook-podium {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  margin-bottom: .5rem;
+}
+.cook-card {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  padding: .75rem 1rem;
+  border: 3px solid var(--line);
+  background: var(--paper);
+  box-shadow: 3px 3px 0 0 var(--line);
+}
+.cook-card--gold   { border-color: var(--mustard); background: #fffbe6; }
+.cook-card--silver { background: #f4f4f4; }
+.cook-card--bronze { background: #fdf3eb; }
+.cook-card__rank {
+  font-size: 1.6rem;
+  line-height: 1;
+  min-width: 2rem;
+  text-align: center;
+}
+.cook-card__avatar-link { flex-shrink: 0; }
+.cook-card__avatar {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border: 2px solid var(--line);
+}
+.cook-card__info { flex: 1; min-width: 0; }
+.cook-card__info a { color: var(--ink); text-decoration: none; }
+.cook-card__info a:hover { color: var(--crimson); }
+.cook-card__stats {
+  display: flex;
+  gap: .35rem;
+  flex-wrap: wrap;
+  margin-top: .25rem;
+}
+
+/* ---------- Responsive adjustments ---------- */
+@media (max-width: 860px) {
+  .spotlight-card {
+    grid-template-columns: 1fr;
+  }
+  .spotlight-card__thumb img {
+    min-height: 200px;
+    max-height: 240px;
+  }
+  .dashboard-duo {
+    grid-template-columns: 1fr;
+  }
+}

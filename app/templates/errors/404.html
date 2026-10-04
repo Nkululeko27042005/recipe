@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found — RecipE{% endblock %}
+{% block content %}
+<div class="card card--plum center" style="max-width:520px;margin:3rem auto;">
+  <h1>404</h1>
+  <p class="muted">This page has been torn out of the book.</p>
+  <a class="btn btn--primary mt-2" href="{{ url_for('feed.dashboard') }}">Return to the Shelf</a>
+</div>
+{% endblock %}

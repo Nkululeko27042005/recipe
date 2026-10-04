@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ profile_user.username }} — RecipE{% endblock %}
+
+{% block content %}
+<div class="card card--plum profile-card">
+  <div class="row">
+    <div class="profile-avatar">
+      {% if profile_user.avatar %}
+        <img src="{{ url_for('static', filename='uploads/' ~ profile_user.avatar) }}"
+             alt="{{ profile_user.username }}" />
+      {% else %}
+        <div class="avatar-placeholder">{{ profile_user.username[:1]|upper }}</div>
+      {% endif %}
+    </div>
+    <div>
+      <h2>{{ profile_user.username }}</h2>
+      <p class="muted">{{ profile_user.bio or "No bio yet." }}</p>
+      <div class="row mt-1">
+        <span class="tag tag--crimson">{{ profile_user.recipes.count() }} recipes</span>
+        <span class="tag tag--forest">{{ profile_user.followers.count() }} followers</span>
+        <span class="tag tag--teal">{{ profile_user.following.count() }} following</span>
+      </div>
+    </div>
+    <span class="spacer"></span>
+
+    {% if current_user.is_authenticated and current_user.id != profile_user.id %}
+      <button class="btn {% if is_following %}btn--ghost{% else %}btn--green{% endif %}"
+              data-action="follow" data-user-id="{{ profile_user.id }}"
+              data-following="{{ 'true' if is_following else 'false' }}">
+        {% if is_following %}Unfollow{% else %}Follow{% endif %}
+      </button>
+    {% elif current_user.is_authenticated and current_user.id == profile_user.id %}
+      <a class="btn btn--ghost" href="{{ url_for('users.settings_page') }}">Edit Profile</a>
+    {% endif %}
+  </div>
+</div>
+
+<div class="chapter"><h2>Recipes by {{ profile_user.username }}</h2></div>
+<div class="grid grid--3">
+  {% for r in recipes %}
+    {% set variant = ["crimson","forest","plum","teal","mustard"][loop.index0 % 5] %}
+    {% include "partials/_recipe_card.html" with context %}
+  {% else %}
+    <p class="muted">No recipes yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

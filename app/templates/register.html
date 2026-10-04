@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Register — RecipE{% endblock %}
+
+{% block content %}
+<div class="card card--forest" style="max-width:640px;margin:2rem auto;">
+  <h2>Create Your Cookbook</h2>
+  <form method="post" action="{{ url_for('auth.register') }}" data-auth-form>
+    <label for="username">Username</label>
+    <input id="username" name="username" required />
+
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" required />
+
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" required minlength="6" />
+
+    <label for="bio">Short Bio</label>
+    <textarea id="bio" name="bio" rows="3" placeholder="A line about your cooking…"></textarea>
+
+    <label for="categories">Preferred Categories</label>
+    <input id="categories" name="categories"
+           placeholder="Desserts, Vegan, Quick Meals" />
+    <p class="muted" style="font-size:.85rem">Comma-separated. Used for recommendations.</p>
+
+    <label for="dietary">Dietary Preferences</label>
+    <input id="dietary" name="dietary"
+           placeholder="Vegetarian, Gluten-Free" />
+
+    <button class="btn btn--green mt-2" type="submit">Bind My Cookbook</button>
+  </form>
+  <p class="mt-2 muted">Already have an account? <a href="{{ url_for('auth.login_page') }}">Sign in</a></p>
+</div>
+{% endblock %}

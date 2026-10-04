@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Browse Recipes — RecipE{% endblock %}
+
+{% block content %}
+<div class="chapter"><h1>Browse Recipes</h1></div>
+
+<form class="filters row" method="get" action="{{ url_for('recipes.list_recipes_page') }}">
+  <input type="search" name="q" placeholder="Search by title…" value="{{ q or '' }}" />
+  <input type="text" name="category" placeholder="Category" value="{{ category or '' }}" />
+  <button class="btn btn--primary" type="submit">Filter</button>
+  <a class="btn btn--ghost" href="{{ url_for('recipes.list_recipes_page') }}">Reset</a>
+</form>
+
+<div class="grid grid--3 mt-2">
+  {% for r in recipes %}
+    {% set variant = ["crimson","forest","plum","teal","mustard"][loop.index0 % 5] %}
+    {% include "partials/_recipe_card.html" with context %}
+  {% else %}
+    <p class="muted">No recipes found.</p>
+  {% endfor %}
+</div>
+
+{% if total_pages and total_pages > 1 %}
+  <nav class="pagination row mt-2">
+    {% if page > 1 %}
+      <a class="btn btn--ghost btn--sm"
+         href="?page={{ page - 1 }}{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}">
+        ← Previous
+      </a>
+    {% endif %}
+    <span class="muted">Page {{ page }} of {{ total_pages }}</span>
+    {% if page < total_pages %}
+      <a class="btn btn--ghost btn--sm"
+         href="?page={{ page + 1 }}{% if q %}&q={{ q }}{% endif %}{% if category %}&category={{ category }}{% endif %}">
+        Next →
+      </a>
+    {% endif %}
+  </nav>
+{% endif %}
+{% endblock %}

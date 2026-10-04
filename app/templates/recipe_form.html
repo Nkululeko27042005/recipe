@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}{{ "Edit" if recipe else "New" }} Recipe — RecipE{% endblock %}
+
+{% block content %}
+<div class="card card--crimson" style="max-width:900px;margin:2rem auto;">
+  <h2>{{ "Edit Recipe" if recipe else "Write a New Recipe" }}</h2>
+
+  <form method="post"
+        enctype="multipart/form-data"
+        action="{{ url_for('recipes.edit_recipe', recipe_id=recipe.id) if recipe else url_for('recipes.create_recipe') }}"
+        data-recipe-form>
+    <label for="title">Title</label>
+    <input id="title" name="title" required value="{{ recipe.title if recipe else '' }}" />
+
+    <label for="category">Category</label>
+    <input id="category" name="category" placeholder="Desserts, Vegan, Quick Meals…"
+           value="{{ recipe.category if recipe else '' }}" />
+
+    <label for="description">Short Description</label>
+    <textarea id="description" name="description" rows="3">{{ recipe.description if recipe else '' }}</textarea>
+
+    <!-- INGREDIENTS -->
+    <label>Ingredients</label>
+    <ul class="dynamic-list" data-list="ingredients">
+      {% if recipe and recipe.ingredients %}
+        {% for ing in recipe.ingredients %}
+          <li class="dynamic-row">
+            <input type="text" name="ing_name[]" placeholder="Name" value="{{ ing.name }}" required />
+            <input type="text" name="ing_qty[]" placeholder="Qty" value="{{ ing.quantity }}" />
+            <input type="text" name="ing_unit[]" placeholder="Unit" value="{{ ing.unit }}" />
+            <input type="text" name="ing_weight[]" placeholder="Weight" value="{{ ing.weight }}" />
+            <input type="text" name="ing_notes[]" placeholder="Notes" value="{{ ing.notes }}" />
+            <button type="button" class="btn btn--sm btn--danger" data-remove-row>✖</button>
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+    <button type="button" class="btn btn--sm btn--ghost" data-add-row="ingredients">+ Add Ingredient</button>
+
+    <!-- STEPS -->
+    <label class="mt-2">Steps</label>
+    <ol class="dynamic-list steps-edit" data-list="steps">
+      {% if recipe and recipe.steps %}
+        {% for step in recipe.steps %}
+          <li class="dynamic-row">
+            <textarea name="step_text[]" rows="2" placeholder="Describe this step…" required>{{ step.instruction }}</textarea>
+            <button type="button" class="btn btn--sm btn--danger" data-remove-row>✖</button>
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ol>
+    <button type="button" class="btn btn--sm btn--ghost" data-add-row="steps">+ Add Step</button>
+
+    <!-- IMAGES -->
+    <label class="mt-2">Images</label>
+    <input type="file" name="images" accept="image/*" multiple />
+    {% if recipe and recipe.images %}
+      <div class="existing-images grid grid--3 mt-1">
+        {% for img in recipe.images %}
+          <label class="existing-image card card--mustard">
+            <img src="{{ url_for('static', filename='uploads/' ~ img.filename) }}"
+                 alt="Existing image" />
+            <span>
+              <input type="checkbox" name="remove_image_ids[]" value="{{ img.id }}" />
+              Remove
+            </span>
+          </label>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <!-- VIDEO -->
+    <label class="mt-2">Video (optional)</label>
+    <input type="file" name="video" accept="video/*" />
+    {% if recipe and recipe.video %}
+      <p class="muted">Current: {{ recipe.video.filename }} — uploading a new one replaces it.</p>
+    {% endif %}
+
+    <button class="btn btn--primary mt-3" type="submit">
+      {{ "Save Changes" if recipe else "Publish Recipe" }}
+    </button>
+  </form>
+</div>
+{% endblock %}

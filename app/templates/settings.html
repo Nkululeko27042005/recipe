@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Settings — RecipE{% endblock %}
+
+{% block content %}
+<div class="card card--forest" style="max-width:640px;margin:2rem auto;">
+  <h2>Your Settings</h2>
+
+  <form method="post" action="{{ url_for('users.update_me') }}" data-settings-form enctype="multipart/form-data">
+    <h3>Profile Picture</h3>
+    <div class="avatar-upload">
+      <div class="avatar-upload__preview">
+        {% if current_user.avatar %}
+          <img id="avatar-preview"
+               src="{{ url_for('static', filename='uploads/' ~ current_user.avatar) }}"
+               alt="Current avatar" />
+        {% else %}
+          <div id="avatar-preview" class="avatar-placeholder">{{ current_user.username[:1]|upper }}</div>
+        {% endif %}
+      </div>
+      <div class="avatar-upload__controls">
+        <label for="avatar" class="btn btn--sm btn--green">Choose Image</label>
+        <input type="file" id="avatar" name="avatar" accept="image/*" style="display:none" />
+        <p class="muted" style="margin-top:.35rem;font-size:.85rem;">
+          JPG, PNG, GIF or WEBP. Max 5 MB.
+        </p>
+        {% if current_user.avatar %}
+          <label style="margin-top:.35rem;display:flex;align-items:center;gap:.35rem;font-weight:400;cursor:pointer;">
+            <input type="checkbox" name="remove_avatar" value="1" style="width:auto;" />
+            Remove current picture
+          </label>
+        {% endif %}
+      </div>
+    </div>
+
+    <hr class="divider" />
+
+    <label for="bio">Bio</label>
+    <textarea id="bio" name="bio" rows="3">{{ current_user.bio }}</textarea>
+
+    <button class="btn btn--primary mt-2" type="submit">Save Profile</button>
+  </form>
+
+  <hr class="divider" />
+
+  <form method="post" action="{{ url_for('users.update_preferences') }}" data-prefs-form>
+    <h3>Preferences</h3>
+
+    <label for="categories">Preferred Categories</label>
+    <input id="categories" name="categories"
+           value="{{ prefs.get_categories()|join(', ') }}"
+           placeholder="Desserts, Vegan, Quick Meals" />
+
+    <label for="dietary">Dietary Preferences</label>
+    <input id="dietary" name="dietary"
+           value="{{ prefs.get_dietary()|join(', ') }}"
+           placeholder="Vegetarian, Gluten-Free" />
+
+    <button class="btn btn--green mt-2" type="submit">Save Preferences</button>
+  </form>
+</div>
+{% endblock %}

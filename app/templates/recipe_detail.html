@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}{{ recipe.title }} — RecipE{% endblock %}
+
+{% block content %}
+<article class="recipe-detail" data-recipe-id="{{ recipe.id }}">
+
+  <div class="chapter">
+    <h1>{{ recipe.title }}</h1>
+  </div>
+
+  <div class="row">
+    <span class="tag tag--crimson">{{ recipe.category or "Uncategorised" }}</span>
+    <span class="muted">by
+      <a href="{{ url_for('users.profile_page', username=recipe.author.username) }}">
+        {{ recipe.author.username }}
+      </a>
+      · {{ recipe.created_at.strftime("%b %d, %Y") }}
+    </span>
+  </div>
+
+  {% if recipe.description %}
+    <p class="recipe-desc">{{ recipe.description }}</p>
+  {% endif %}
+
+  {% if recipe.images %}
+    <div class="gallery grid grid--3">
+      {% for img in recipe.images %}
+        <figure class="card card--{{ 'crimson' if img.is_primary else 'mustard' }} gallery__item">
+          <img src="{{ url_for('static', filename='uploads/' ~ img.filename) }}"
+               alt="{{ recipe.title }} — image {{ loop.index }}" loading="lazy">
+        </figure>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {% if recipe.video %}
+    <div class="chapter"><h2>Video</h2></div>
+    <video class="recipe-video" controls preload="metadata"
+           src="{{ url_for('static', filename='uploads/' ~ recipe.video.filename) }}"></video>
+  {% endif %}
+
+  <div class="grid grid--2 mt-3">
+    <section>
+      <div class="chapter"><h2>Ingredients</h2></div>
+      <ul class="ingredients">
+        {% for ing in recipe.ingredients %}
+          <li>
+            <span>{{ ing.name }}{% if ing.notes %} <em class="muted">({{ ing.notes }})</em>{% endif %}</span>
+            <span class="qty">
+              {{ ing.quantity }}{% if ing.unit %} {{ ing.unit }}{% endif %}
+              {% if ing.weight %} · {{ ing.weight }}{% endif %}
+            </span>
+          </li>
+        {% else %}
+          <li class="muted">No ingredients listed.</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section>
+      <div class="chapter"><h2>Steps</h2></div>
+      <ol class="steps">
+        {% for step in recipe.steps %}
+          <li><div>{{ step.instruction }}</div></li>
+        {% else %}
+          <li class="muted">No steps listed.</li>
+        {% endfor %}
+      </ol>
+    </section>
+  </div>
+
+  <!-- Action bar -->
+  <div class="action-bar" data-action-bar>
+    <button class="btn btn--like {% if my_reaction == 1 %}is-active{% endif %}"
+            data-action="like" data-recipe-id="{{ recipe.id }}">
+      ♥ <span class="likes-count">{{ recipe.likes_count }}</span>
+    </button>
+    <button class="btn btn--dislike {% if my_reaction == -1 %}is-active{% endif %}"
+            data-action="dislike" data-recipe-id="{{ recipe.id }}">
+      ✖ <span class="dislikes-count">{{ recipe.dislikes_count }}</span>
+    </button>
+    <button class="btn btn--save {% if is_saved %}is-active{% endif %}"
+            data-action="save" data-recipe-id="{{ recipe.id }}">
+      🔖 Save
+    </button>
+
+    {% if current_user.is_authenticated and current_user.id == recipe.user_id %}
+      <span class="spacer"></span>
+      <a class="btn btn--ghost btn--sm"
+         href="{{ url_for('recipes.edit_recipe_page', recipe_id=recipe.id) }}">Edit</a>
+      <button class="btn btn--danger btn--sm"
+              data-action="delete-recipe" data-recipe-id="{{ recipe.id }}">Delete</button>
+    {% endif %}
+  </div>
+
+  <!-- Comments -->
+  <div class="chapter"><h2>Comments ({{ recipe.comments.count() }})</h2></div>
+
+  {% if current_user.is_authenticated %}
+    <form class="comment-form" data-comment-form data-recipe-id="{{ recipe.id }}">
+      <textarea name="body" rows="3" placeholder="Share a note…" required></textarea>
+      <button class="btn btn--primary mt-1" type="submit">Post Comment</button>
+    </form>
+  {% else %}
+    <p class="muted"><a href="{{ url_for('auth.login_page') }}">Log in</a> to comment.</p>
+  {% endif %}
+
+  <div class="comment-list" data-comment-list data-recipe-id="{{ recipe.id }}">
+    {% for c in comments %}
+      {% include "partials/_comment.html" with context %}
+    {% else %}
+      <p class="muted">No comments yet — be the first.</p>
+    {% endfor %}
+  </div>
+
+</article>
+{% endblock %}

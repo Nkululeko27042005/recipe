@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Login — RecipE{% endblock %}
+
+{% block content %}
+<div class="card card--crimson" style="max-width:520px;margin:2rem auto;">
+  <h2>Sign In</h2>
+  <form method="post" action="{{ url_for('auth.login') }}" data-auth-form>
+    <label for="identifier">Username or Email</label>
+    <input id="identifier" name="identifier" required autofocus />
+
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" required />
+
+    <button class="btn btn--primary mt-2" type="submit">Open the Book</button>
+  </form>
+  <p class="mt-2 muted">New here? <a href="{{ url_for('auth.register_page') }}">Register</a></p>
+</div>
+{% endblock %}

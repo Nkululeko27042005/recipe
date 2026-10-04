@@ -1,0 +1,42 @@
+<div class="comment" data-comment-id="{{ c.id }}">
+  <div class="meta">
+    <strong>
+      <a href="{{ url_for('users.profile_page', username=c.author.username) }}">
+        {{ c.author.username }}
+      </a>
+    </strong>
+    · {{ c.created_at.strftime("%b %d, %Y %H:%M") }}
+  </div>
+  <div class="comment-body">{{ c.body }}</div>
+
+  {% if current_user.is_authenticated %}
+    <div class="row mt-1">
+      <button class="btn btn--sm btn--ghost" data-action="reply" data-comment-id="{{ c.id }}">Reply</button>
+      {% if current_user.id == c.author.id %}
+        <button class="btn btn--sm btn--danger" data-action="delete-comment" data-comment-id="{{ c.id }}">Delete</button>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  {% if c.replies.count() %}
+    <div class="comment-replies">
+      {% for reply in c.replies %}
+        <div class="comment reply" data-comment-id="{{ reply.id }}">
+          <div class="meta">
+            <strong>
+              <a href="{{ url_for('users.profile_page', username=reply.author.username) }}">
+                {{ reply.author.username }}
+              </a>
+            </strong>
+            · {{ reply.created_at.strftime("%b %d, %Y %H:%M") }}
+          </div>
+          <div class="comment-body">{{ reply.body }}</div>
+          {% if current_user.is_authenticated and current_user.id == reply.author.id %}
+            <button class="btn btn--sm btn--danger mt-1"
+                    data-action="delete-comment" data-comment-id="{{ reply.id }}">Delete</button>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>

@@ -1,0 +1,50 @@
+<article class="card card--{{ variant|default('crimson') }}{% if ribbon %} card--ribbon{% endif %}"
+         data-recipe-id="{{ r.id }}">
+  {% if r.images %}
+    {% set primary = r.images|selectattr('is_primary')|first or r.images[0] %}
+    <div class="card__thumb">
+      <img src="{{ url_for('static', filename='uploads/' ~ primary.filename) }}"
+           alt="{{ r.title }}" loading="lazy">
+    </div>
+  {% endif %}
+
+  <h3 class="card__title">
+    <a href="{{ url_for('recipes.recipe_page', recipe_id=r.id) }}">{{ r.title }}</a>
+  </h3>
+
+  <div class="card__tags">
+    <span class="tag tag--{{ variant|default('crimson') }}">{{ r.category or "Uncategorised" }}</span>
+    {% if r.video %}<span class="tag">▶ Video</span>{% endif %}
+  </div>
+
+  <p class="muted card__desc">
+    {{ r.description[:120] }}{% if r.description|length > 120 %}…{% endif %}
+  </p>
+
+  <div class="row card__meta">
+    <span class="muted">by
+      <a href="{{ url_for('users.profile_page', username=r.author.username) }}">{{ r.author.username }}</a>
+    </span>
+    <span class="spacer"></span>
+    <span class="tag">♥ {{ r.likes_count }}</span>
+    <span class="tag">💬 {{ r.comments.count() }}</span>
+  </div>
+
+  {% if current_user.is_authenticated %}
+    <div class="action-bar" data-action-bar>
+      <button class="btn btn--sm btn--like {% if r.to_dict(current_user_id=current_user.id).my_reaction == 1 %}is-active{% endif %}"
+              data-action="like" data-recipe-id="{{ r.id }}"
+              aria-label="Like">♥ <span class="likes-count">{{ r.likes_count }}</span></button>
+
+      <button class="btn btn--sm btn--dislike {% if r.to_dict(current_user_id=current_user.id).my_reaction == -1 %}is-active{% endif %}"
+              data-action="dislike" data-recipe-id="{{ r.id }}"
+              aria-label="Dislike">✖ <span class="dislikes-count">{{ r.dislikes_count }}</span></button>
+
+      <span class="spacer"></span>
+
+      <button class="btn btn--sm btn--save {% if r.to_dict(current_user_id=current_user.id).is_saved %}is-active{% endif %}"
+              data-action="save" data-recipe-id="{{ r.id }}"
+              aria-label="Save to my cookbook">🔖 Save</button>
+    </div>
+  {% endif %}
+</article>

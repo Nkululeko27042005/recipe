@@ -1,0 +1,238 @@
+{% extends "base.html" %}
+{% block title %}RecipE — The Shelf{% endblock %}
+
+{% block content %}
+
+  {# ═══════════════════════════════════════════════════════════
+     HERO BANNER
+     ═══════════════════════════════════════════════════════════ #}
+  <section class="hero">
+    {% if current_user.is_authenticated %}
+      <h1>Welcome back, {{ current_user.username }}.</h1>
+      <p class="muted">Here's what's cooking on your shelf today.</p>
+    {% else %}
+      <h1>Welcome to RecipE</h1>
+      <p class="muted">A place to discover, share, and save your favourite recipes.</p>
+    {% endif %}
+
+    {# Hall-of-fame pill shown in the hero if a most-famous recipe exists #}
+    {% if most_famous_recipe %}
+      <div class="hero__fame">
+        <span class="hero__fame-label">🏆 All-Time Legend</span>
+        <a class="hero__fame-link"
+           href="{{ url_for('recipes.recipe_page', recipe_id=most_famous_recipe.id) }}">
+          {{ most_famous_recipe.title }}
+        </a>
+        <span class="muted">by {{ most_famous_recipe.author.username }}</span>
+      </div>
+    {% endif %}
+  </section>
+
+  {# ═══════════════════════════════════════════════════════════
+     AUTHENTICATED SECTIONS
+     ═══════════════════════════════════════════════════════════ #}
+  {% if current_user.is_authenticated %}
+
+    {# ── Recommended + Saved ── #}
+    <div class="dashboard-split">
+      <section class="dashboard-split__main">
+        <div class="chapter"><h2>Recommended For You</h2></div>
+        <div class="grid grid--2">
+          {% for r in recommended %}
+            {% set variant = ["crimson","forest","plum","teal","mustard"][loop.index0 % 5] %}
+            {% include "partials/_recipe_card.html" with context %}
+          {% else %}
+            <p class="muted">No recommendations yet — follow some cooks or set preferences.</p>
+          {% endfor %}
+        </div>
+      </section>
+
+      <aside class="dashboard-split__side">
+        <div class="chapter"><h2>Saved</h2></div>
+        {% for r in saved[:6] %}
+          <div class="saved-item">
+            <a href="{{ url_for('recipes.recipe_page', recipe_id=r.id) }}">{{ r.title }}</a>
+            <span class="muted">by {{ r.author.username }}</span>
+          </div>
+        {% else %}
+          <p class="muted">Nothing saved yet.</p>
+        {% endfor %}
+      </aside>
+    </div>
+
+    {# ── Your Recipes ── #}
+    <div class="chapter"><h2>Your Recipes</h2></div>
+    {% if my_recipes %}
+      <div class="grid grid--3">
+        {% for r in my_recipes %}
+          {% set variant = "forest" %}
+          {% include "partials/_recipe_card.html" with context %}
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty-state">
+        <p>You haven't written any recipes yet.</p>
+        <a class="btn btn--green" href="{{ url_for('recipes.new_recipe_page') }}">Write your first recipe →</a>
+      </div>
+    {% endif %}
+
+  {% endif %}
+
+  {# ═══════════════════════════════════════════════════════════
+     SPOTLIGHT ROW — this month's hottest recipe
+     ═══════════════════════════════════════════════════════════ #}
+  {% if most_interacted_this_month %}
+    {% set r = most_interacted_this_month %}
+    <div class="chapter"><h2>🔥 Recipe of the Month</h2></div>
+    <div class="spotlight-card">
+      {% if r.images %}
+        {% set primary = r.images|selectattr('is_primary')|first or r.images[0] %}
+        <div class="spotlight-card__thumb">
+          <img src="{{ url_for('static', filename='uploads/' ~ primary.filename) }}"
+               alt="{{ r.title }}" loading="lazy" />
+        </div>
+      {% endif %}
+      <div class="spotlight-card__body">
+        <span class="spotlight-card__badge">Most Interacted · {{ now_month }}</span>
+        <h2><a href="{{ url_for('recipes.recipe_page', recipe_id=r.id) }}">{{ r.title }}</a></h2>
+        <p class="muted">
+          by <a href="{{ url_for('users.profile_page', username=r.author.username) }}">{{ r.author.username }}</a>
+          &nbsp;·&nbsp; {{ r.category or "Uncategorised" }}
+        </p>
+        <p class="recipe-desc">{{ r.description[:200] }}{% if r.description|length > 200 %}…{% endif %}</p>
+        <div class="row mt-1">
+          <span class="tag tag--crimson">♥ {{ r.likes_count }} likes</span>
+          <span class="tag tag--plum">💬 {{ r.comments.count() }} comments</span>
+          <span class="tag tag--forest">🔖 {{ r.savers.count() }} saves</span>
+        </div>
+        <a class="btn btn--primary mt-2"
+           href="{{ url_for('recipes.recipe_page', recipe_id=r.id) }}">Read Recipe →</a>
+      </div>
+    </div>
+  {% endif %}
+
+  {# ═══════════════════════════════════════════════════════════
+     THE MAIN SHELF
+     ═══════════════════════════════════════════════════════════ #}
+  <div class="chapter"><h2>The Main Shelf</h2></div>
+  <div class="grid grid--3">
+    {% for r in feed %}
+      {% set variant = ["crimson","teal","mustard","forest","plum"][loop.index0 % 5] %}
+      {% include "partials/_recipe_card.html" with context %}
+    {% else %}
+      <p class="muted">No recipes on the shelf yet.</p>
+    {% endfor %}
+  </div>
+
+  {# ═══════════════════════════════════════════════════════════
+     FRESH THIS WEEK
+     ═══════════════════════════════════════════════════════════ #}
+  {% if fresh_this_week %}
+    <div class="chapter"><h2>✨ Fresh This Week</h2></div>
+    <div class="grid grid--3">
+      {% for r in fresh_this_week %}
+        {% set variant = "teal" %}
+        {% include "partials/_recipe_card.html" with context %}
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  {# ═══════════════════════════════════════════════════════════
+     TOP LIKED  +  MOST SAVED  (two-column grid of grids)
+     ═══════════════════════════════════════════════════════════ #}
+  <div class="dashboard-duo">
+    <section>
+      <div class="chapter"><h2>Top Liked</h2></div>
+      {% if top_liked %}
+        <div class="grid grid--1">
+          {% for r in top_liked[:4] %}
+            {% set variant = "plum" %}
+            {% set ribbon = true %}
+            {% include "partials/_recipe_card.html" with context %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="muted">No liked recipes yet — be the first to ♥ something!</p>
+      {% endif %}
+    </section>
+
+    <section>
+      <div class="chapter"><h2>🔖 Most Saved</h2></div>
+      {% if most_saved %}
+        <div class="grid grid--1">
+          {% for r in most_saved[:4] %}
+            {% set variant = "mustard" %}
+            {% include "partials/_recipe_card.html" with context %}
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="muted">No saved recipes yet.</p>
+      {% endif %}
+    </section>
+  </div>
+
+  {# ═══════════════════════════════════════════════════════════
+     THIS MONTH'S TOP COOKS  +  RISING COOKS  (split)
+     ═══════════════════════════════════════════════════════════ #}
+  <div class="dashboard-split">
+    <section class="dashboard-split__main">
+      <div class="chapter"><h2>📅 This Month's Top Cooks</h2></div>
+      {% if top_cooks_this_month %}
+        <div class="cook-podium">
+          {% for u, score in top_cooks_this_month %}
+            <div class="cook-card {% if loop.index == 1 %}cook-card--gold{% elif loop.index == 2 %}cook-card--silver{% elif loop.index == 3 %}cook-card--bronze{% endif %}">
+              <div class="cook-card__rank">
+                {% if loop.index == 1 %}🥇{% elif loop.index == 2 %}🥈{% elif loop.index == 3 %}🥉{% else %}#{{ loop.index }}{% endif %}
+              </div>
+              <a href="{{ url_for('users.profile_page', username=u.username) }}" class="cook-card__avatar-link">
+                {% if u.avatar %}
+                  <img src="{{ url_for('static', filename='uploads/' ~ u.avatar) }}"
+                       alt="{{ u.username }}" class="cook-card__avatar" />
+                {% else %}
+                  <span class="avatar-placeholder--sm">{{ u.username[:1]|upper }}</span>
+                {% endif %}
+              </a>
+              <div class="cook-card__info">
+                <a href="{{ url_for('users.profile_page', username=u.username) }}">
+                  <strong>{{ u.username }}</strong>
+                </a>
+                <div class="cook-card__stats">
+                  <span class="tag tag--mustard">⚡ {{ score }} pts</span>
+                  <span class="tag">{{ u.recipes.count() }} recipes</span>
+                  <span class="tag tag--teal">{{ u.followers.count() }} followers</span>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="muted">No cook interactions recorded this month yet.</p>
+      {% endif %}
+    </section>
+
+    <aside class="dashboard-split__side">
+      <div class="chapter"><h2>📈 Rising Cooks</h2></div>
+      <p class="muted" style="font-size:.8rem;margin-top:-.5rem;">Gaining the most followers in 30 days</p>
+      {% for u in rising_users %}
+        <div class="rising-user">
+          <a href="{{ url_for('users.profile_page', username=u.username) }}" class="rising-user__link">
+            {% if u.avatar %}
+              <img src="{{ url_for('static', filename='uploads/' ~ u.avatar) }}"
+                   alt="{{ u.username }}" class="rising-user__avatar" />
+            {% else %}
+              <span class="avatar-placeholder--sm">{{ u.username[:1]|upper }}</span>
+            {% endif %}
+            <strong>{{ u.username }}</strong>
+          </a>
+          <div class="rising-user__stats">
+            <span class="tag tag--teal">{{ u.followers.count() }} followers</span>
+            <span class="tag">{{ u.recipes.count() }} recipes</span>
+          </div>
+        </div>
+      {% else %}
+        <p class="muted">No one gained followers recently.</p>
+      {% endfor %}
+    </aside>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}RecipE — A Book of Recipes{% endblock %}</title>
+
+  <!-- Google Fonts for that book feel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  {% block head %}{% endblock %}
+</head>
+<body data-authed="{{ 'true' if current_user.is_authenticated else 'false' }}"
+      data-user-id="{{ current_user.id if current_user.is_authenticated else '' }}">
+
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="{{ url_for('feed.dashboard') }}">RecipE</a>
+
+      <button class="nav-toggle" aria-label="Toggle navigation" data-nav-toggle>☰</button>
+
+      <nav class="site-nav" data-nav>
+        <a href="{{ url_for('feed.dashboard') }}">Shelf</a>
+        <a href="{{ url_for('recipes.list_recipes_page') }}">Browse</a>
+
+        {% if current_user.is_authenticated %}
+          <a href="{{ url_for('recipes.new_recipe_page') }}">+ New Recipe</a>
+          <a href="{{ url_for('users.profile_page', username=current_user.username) }}" class="nav-avatar">
+            {% if current_user.avatar %}
+              <img src="{{ url_for('static', filename='uploads/' ~ current_user.avatar) }}"
+                   alt="{{ current_user.username }}" />
+            {% else %}
+              <span class="avatar-placeholder--sm">{{ current_user.username[:1]|upper }}</span>
+            {% endif %}
+            {{ current_user.username }}
+          </a>
+          <form action="{{ url_for('auth.logout') }}" method="post" style="display:inline">
+            <button class="btn btn--sm btn--primary" type="submit">Logout</button>
+          </form>
+        {% else %}
+          <a href="{{ url_for('auth.login_page') }}">Login</a>
+          <a href="{{ url_for('auth.register_page') }}">Register</a>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-stack">
+          {% for category, msg in messages %}
+            <div class="card card--{{ category or 'mustard' }} flash">{{ msg }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    RecipE — recipes, bound and shared.
+  </footer>
+
+  <!-- Toast container -->
+  <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

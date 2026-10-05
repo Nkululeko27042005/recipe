@@ -836,3 +836,109 @@ label {
     grid-template-columns: 1fr;
   }
 }
+
+.notification-list { list-style: none; padding: 0; }
+.notification {
+  display: flex;
+  gap: .75rem;
+  padding: .75rem 1rem;
+  border: 3px solid var(--line);
+  background: var(--paper);
+  margin-bottom: .5rem;
+  align-items: flex-start;
+}
+.notification--unread { background: #fffbe6; }
+.notification__icon {
+  font-size: 1.4rem;
+  width: 2rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+.notification__body { flex: 1; }
+.notification__time {
+  display: block;
+  font-size: .75rem;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-top: .15rem;
+}
+.nav-bell { position: relative; text-decoration: none; }
+.nav-bell__badge {
+  position: absolute;
+  top: -6px; right: -8px;
+  background: var(--mustard);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  font-size: .7rem;
+  font-weight: 700;
+  padding: 0 .35rem;
+  min-width: 18px;
+  text-align: center;
+}
+
+.admin-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+.admin-stat {
+  font-size: 2.4rem;
+  font-weight: 900;
+  font-family: "Playfair Display", serif;
+  margin: 0;
+}
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--paper);
+  border: 3px solid var(--line);
+}
+.admin-table th, .admin-table td {
+  padding: .5rem .75rem;
+  border-bottom: 2px solid var(--line);
+  text-align: left;
+}
+.admin-table th {
+  background: var(--crimson);
+  color: var(--paper);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: .85rem;
+}
+.admin-table tr:last-child td { border-bottom: none; }
+
+/* =========================================================
+   Dark mode — "Library at Night"
+   ========================================================= */
+body.theme-dark {
+  --paper:    #1a1510;
+  --paper-2:  #241d16;
+  --ink:      #f0e6d2;
+  --ink-soft: #b0a08a;
+  --line:     #f0e6d2;
+  --crimson:  #d63a45;
+  --mustard:  #f0b429;
+  --forest:   #3fa87a;
+  --plum:     #b856b6;
+  --teal:     #2aa5b0;
+  --shadow:   4px 4px 0 0 var(--line);
+}
+body.theme-dark input,
+body.theme-dark textarea,
+body.theme-dark select {
+  background: #2a231a;
+  color: var(--ink);
+}
+body.theme-dark .card__thumb img,
+body.theme-dark .gallery__item img { filter: brightness(0.9) saturate(1.05); }
+body.theme-dark .card--gold,
+body.theme-dark .card--silver,
+body.theme-dark .card--bronze { background: var(--paper); }
+body.theme-dark .notification--unread { background: #2f281b; }
+
+html.theme-dark-pre {
+  background: #1a1510;
+}
+html.theme-dark-pre body {
+  visibility: hidden;
+}

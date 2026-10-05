@@ -11,6 +11,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <script>
+    if (localStorage.getItem("recipe-theme") === "dark") {
+      document.documentElement.classList.add("theme-dark-pre");
+    }
+  </script>
   {% block head %}{% endblock %}
 </head>
 <body data-authed="{{ 'true' if current_user.is_authenticated else 'false' }}"
@@ -25,8 +30,12 @@
       <nav class="site-nav" data-nav>
         <a href="{{ url_for('feed.dashboard') }}">Shelf</a>
         <a href="{{ url_for('recipes.list_recipes_page') }}">Browse</a>
+        <a href="{{ url_for('recipes.by_ingredients_page') }}">By Ingredients</a>
 
         {% if current_user.is_authenticated %}
+          <a href="{{ url_for('notifications.list_page') }}" class="nav-bell" title="Notifications">
+    🔔<span class="nav-bell__badge" data-notif-badge hidden></span>
+          </a>
           <a href="{{ url_for('recipes.new_recipe_page') }}">+ New Recipe</a>
           <a href="{{ url_for('users.profile_page', username=current_user.username) }}" class="nav-avatar">
             {% if current_user.avatar %}
@@ -40,6 +49,7 @@
           <form action="{{ url_for('auth.logout') }}" method="post" style="display:inline">
             <button class="btn btn--sm btn--primary" type="submit">Logout</button>
           </form>
+          <button class="btn btn--sm btn--ghost theme-toggle" data-theme-toggle title="Toggle theme">🌙</button>
         {% else %}
           <a href="{{ url_for('auth.login_page') }}">Login</a>
           <a href="{{ url_for('auth.register_page') }}">Register</a>
@@ -70,6 +80,19 @@
   <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
 
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  <script>
+    (function () {
+      if (document.body.dataset.authed !== "true") return;
+      fetch("{{ url_for('notifications.count') }}", { credentials: "same-origin" })
+        .then(r => r.json())
+        .then(d => {
+          const badge = document.querySelector("[data-notif-badge]");
+          const n = d?.data?.unread || 0;
+          if (badge && n > 0) { badge.textContent = n; badge.hidden = false; }
+        })
+        .catch(() => {});
+    })();
+  </script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

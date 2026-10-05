@@ -66,6 +66,23 @@
     }
   });
 
+/* -------------------- Theme Toggle -------------------- */
+(function initTheme() {
+  const saved = localStorage.getItem("recipe-theme");
+  if (saved === "dark") document.body.classList.add("theme-dark");
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("[data-theme-toggle]")) return;
+    document.body.classList.toggle("theme-dark");
+    const isDark = document.body.classList.contains("theme-dark");
+    localStorage.setItem("recipe-theme", isDark ? "dark" : "light");
+    $$("[data-theme-toggle]").forEach(b => b.textContent = isDark ? "☀" : "🌙");
+  });
+  // sync icon on load
+  if (document.body.classList.contains("theme-dark")) {
+    $$("[data-theme-toggle]").forEach(b => b.textContent = "☀");
+  }
+})();
+
   /* -------------------- Reactions (Like / Dislike) -------------------- */
   document.addEventListener("click", async (e) => {
     const btn = e.target.closest("[data-action='like'], [data-action='dislike']");
@@ -368,10 +385,69 @@
     }
     toast("Recipe saved.", "success");
     setTimeout(() => {
-      window.location.href = `/recipes/${data.data.id}`;
+      window.location.href = `/recipes/${data.data.id}/view`;
     }, 500);
   });
+/* -------------------- Recipe Scaling -------------------- */
+function parseQty(s) {
+  if (!s) return null;
+  s = s.trim();
+  // "1/2", "1 1/2", "2", "2.5", "400"
+  if (/^\d+\s+\d+\/\d+$/.test(s)) {
+    const [whole, frac] = s.split(/\s+/);
+    const [n, d] = frac.split("/").map(Number);
+    return Number(whole) + n / d;
+  }
+  if (/^\d+\/\d+$/.test(s)) {
+    const [n, d] = s.split("/").map(Number);
+    return n / d;
+  }
+  const f = parseFloat(s);
+  return isNaN(f) ? null : f;
+}
 
+function formatQty(n) {
+  if (n == null) return "";
+  // Snap to nearest 1/4 if close
+  const whole = Math.floor(n);
+  const frac = n - whole;
+  const fractions = [
+    [0, ""], [0.25, " 1/4"], [0.5, " 1/2"], [0.75, " 3/4"], [1, ""],
+  ];
+  let best = fractions[0], bestDiff = Infinity;
+  for (const [v, label] of fractions) {
+    const d = Math.abs(v - frac);
+    if (d < bestDiff) { bestDiff = d; best = [v, label]; }
+  }
+  const rounded = whole + (best[0] === 1 ? 1 : 0);
+  return `${rounded}${best[0] === 1 ? "" : best[1]}`.trim() || "0";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.documentElement.classList.remove("theme-dark-pre");
+});
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-scale]");
+  if (!btn) return;
+  const factor = parseFloat(btn.dataset.scale);
+  const list = $("[data-scalable]");
+  if (!list) return;
+
+  // Toggle active button
+  $$("[data-scale]").forEach(b => b.classList.remove("btn--primary"));
+  $$("[data-scale]").forEach(b => b.classList.add("btn--ghost"));
+  btn.classList.add("btn--primary");
+  btn.classList.remove("btn--ghost");
+
+  $$("[data-original-qty]", list).forEach((el) => {
+    const orig = el.dataset.originalQty;
+    const origWeight = el.dataset.originalWeight || "";
+    const n = parseQty(orig);
+    if (n == null) return;
+    el.childNodes[0].nodeValue = formatQty(n * factor);
+  });
+});
   /* -------------------- Settings forms -------------------- */
 
   /* Live avatar preview when a file is selected */

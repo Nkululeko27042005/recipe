@@ -7,7 +7,7 @@
 
   <form method="post"
         enctype="multipart/form-data"
-        action="{{ url_for('recipes.edit_recipe', recipe_id=recipe.id) if recipe else url_for('recipes.create_recipe') }}"
+        action="{{ url_for('recipes.update_recipe', recipe_id=recipe.id) if recipe else url_for('recipes.create_recipe') }}"
         data-recipe-form>
     <label for="title">Title</label>
     <input id="title" name="title" required value="{{ recipe.title if recipe else '' }}" />

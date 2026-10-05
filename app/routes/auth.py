@@ -65,7 +65,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    if request.is_json or request.accept_mimetypes.accept_json:
+    if request.is_json or request.accept_mimetypes.best == "application/json":
         return ok(message="Logged out")
     flash("Logged out", "success")
     return redirect(url_for("auth.login_page"))

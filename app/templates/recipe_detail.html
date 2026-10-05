@@ -42,11 +42,22 @@
   <div class="grid grid--2 mt-3">
     <section>
       <div class="chapter"><h2>Ingredients</h2></div>
-      <ul class="ingredients">
+
+      <div class="scale-controls row">
+        <label>Scale:</label>
+        <button class="btn btn--sm btn--ghost" data-scale="0.5">½×</button>
+        <button class="btn btn--sm btn--primary" data-scale="1">1×</button>
+        <button class="btn btn--sm btn--ghost" data-scale="2">2×</button>
+        <button class="btn btn--sm btn--ghost" data-scale="3">3×</button>
+      </div>
+
+      <ul class="ingredients" data-scalable>
         {% for ing in recipe.ingredients %}
           <li>
             <span>{{ ing.name }}{% if ing.notes %} <em class="muted">({{ ing.notes }})</em>{% endif %}</span>
-            <span class="qty">
+            <span class="qty"
+                  data-original-qty="{{ ing.quantity }}"
+                  data-original-weight="{{ ing.weight }}">
               {{ ing.quantity }}{% if ing.unit %} {{ ing.unit }}{% endif %}
               {% if ing.weight %} · {{ ing.weight }}{% endif %}
             </span>
@@ -86,6 +97,9 @@
 
     {% if current_user.is_authenticated and current_user.id == recipe.user_id %}
       <span class="spacer"></span>
+      <a class="btn btn--ghost btn--sm"
+   href="{{ url_for('recipes.print_recipe', recipe_id=recipe.id) }}"
+   target="_blank">🖨 Print</a>
       <a class="btn btn--ghost btn--sm"
          href="{{ url_for('recipes.edit_recipe_page', recipe_id=recipe.id) }}">Edit</a>
       <button class="btn btn--danger btn--sm"

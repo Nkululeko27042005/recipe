@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ recipe.title }} — Recipe</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <style>
+    @media print {
+      body { background: #fff; color: #000; }
+      .no-print { display: none; }
+      .card { box-shadow: none; }
+    }
+    .print-wrap { max-width: 720px; margin: 2rem auto; padding: 1rem; }
+    .no-print { text-align: center; margin-bottom: 1.5rem; }
+  </style>
+</head>
+<body>
+  <div class="print-wrap">
+
+    <div class="no-print">
+      <button class="btn btn--primary" onclick="window.print()">🖨 Print / Save as PDF</button>
+      <a class="btn btn--ghost" href="{{ url_for('recipes.recipe_page', recipe_id=recipe.id) }}">← Back</a>
+    </div>
+
+    <article class="card card--crimson">
+      <h1>{{ recipe.title }}</h1>
+      <p class="muted">
+        by {{ recipe.author.username }} · {{ recipe.category or "Uncategorised" }}
+        · {{ recipe.created_at.strftime("%b %d, %Y") }}
+      </p>
+      {% if recipe.description %}
+        <p class="recipe-desc">{{ recipe.description }}</p>
+      {% endif %}
+    </article>
+
+    <section class="card card--forest">
+      <h2>Ingredients</h2>
+      <ul class="ingredients">
+        {% for ing in recipe.ingredients %}
+          <li>
+            <span>{{ ing.name }}{% if ing.notes %} ({{ ing.notes }}){% endif %}</span>
+            <span class="qty">{{ ing.quantity }} {{ ing.unit }}{% if ing.weight %} · {{ ing.weight }}{% endif %}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="card card--mustard">
+      <h2>Steps</h2>
+      <ol class="steps">
+        {% for step in recipe.steps %}
+          <li><div>{{ step.instruction }}</div></li>
+        {% endfor %}
+      </ol>
+    </section>
+
+  </div>
+</body>
+</html>

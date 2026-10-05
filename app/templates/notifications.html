@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Notifications — RecipE{% endblock %}
+
+{% block content %}
+<div class="chapter"><h1>Notifications</h1></div>
+
+{% if notifications %}
+  <ul class="notification-list">
+    {% for n in notifications %}
+      <li class="notification notification--{{ n.kind }}{% if not n.is_read %} notification--unread{% endif %}">
+        <span class="notification__icon">
+          {% if n.kind == "like" %}♥
+          {% elif n.kind == "comment" %}💬
+          {% elif n.kind == "reply" %}↩
+          {% elif n.kind == "follow" %}👤
+          {% else %}•{% endif %}
+        </span>
+        <div class="notification__body">
+          {% if n.actor %}
+            <a href="{{ url_for('users.profile_page', username=n.actor.username) }}">{{ n.actor.username }}</a>
+          {% else %}<em>Someone</em>{% endif %}
+
+          {% if n.kind == "like" %} liked your recipe
+          {% elif n.kind == "comment" %} commented on
+          {% elif n.kind == "reply" %} replied to your comment on
+          {% elif n.kind == "follow" %} followed you
+          {% endif %}
+
+          {% if n.recipe %}
+            <a href="{{ url_for('recipes.recipe_page', recipe_id=n.recipe.id) }}">"{{ n.recipe.title }}"</a>
+          {% endif %}
+
+          <span class="notification__time">{{ n.created_at|timeago }}</span>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p class="muted">You have no notifications yet.</p>
+{% endif %}
+{% endblock %}

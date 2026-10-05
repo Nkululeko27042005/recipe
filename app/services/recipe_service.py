@@ -133,3 +133,21 @@ class RecipeService:
             q = q.filter(Recipe.title.ilike(f"%{search}%"))
         return (q.order_by(Recipe.created_at.desc())
                 .limit(limit).offset(offset).all())
+
+    @staticmethod
+    def search_by_ingredients(terms, limit=30):
+        """
+    Find recipes containing ALL terms in their ingredient names.
+    terms: list of strings like ["tomato", "basil"]
+    """
+        from app.models import Ingredient
+        if not terms:
+            return []
+        q = Recipe.query
+        for term in terms:
+            q = q.filter(
+            Recipe.ingredients.any(
+                Ingredient.name.ilike(f"%{term.strip()}%")
+            )
+        )
+        return q.order_by(Recipe.created_at.desc()).limit(limit).all()

@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from app.extensions import db
 from app.models import (
     User, UserPreference, Recipe, Ingredient, Step,
-    RecipeImage, Comment, Reaction, Follow,
+    RecipeImage, Comment, Reaction, Follow, Notification,
 )
 
 
@@ -237,6 +237,7 @@ def seed():
     print("🌱 Seeding RecipE database...")
 
     # Clean slate (safe for dev) — delete in dependency order
+    db.session.query(Notification).delete()
     db.session.query(Reaction).delete()
     db.session.query(Comment).delete()
     db.session.query(Follow).delete()

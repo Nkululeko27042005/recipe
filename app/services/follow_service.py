@@ -1,5 +1,6 @@
 from app.extensions import db
 from app.models import Follow, User
+from app.services.notification_service import NotificationService
 
 
 class FollowService:
@@ -12,6 +13,7 @@ class FollowService:
             return False
         db.session.add(Follow(follower_id=follower.id, followed_id=target.id))
         db.session.commit()
+        NotificationService.create(user_id=target.id, kind="follow", actor=follower)
         return True
 
     @staticmethod

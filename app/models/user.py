@@ -34,6 +34,10 @@ class User(db.Model, UserMixin):
         "Follow", foreign_keys="Follow.followed_id",
         backref="followed", lazy="dynamic", cascade="all, delete-orphan"
     )
+    notifications = db.relationship(
+        "Notification", foreign_keys="Notification.user_id",
+        back_populates="user", lazy="dynamic", cascade="all, delete-orphan"
+    )
 
     def set_password(self, raw):
         self.password_hash = bcrypt.generate_password_hash(raw).decode()

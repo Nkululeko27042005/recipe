@@ -34,6 +34,7 @@ class Recipe(db.Model):
                                cascade="all, delete-orphan")
     reactions = db.relationship("Reaction", backref="recipe", lazy="dynamic",
                                 cascade="all, delete-orphan")
+    notifications = db.relationship("Notification", back_populates="recipe", cascade="all, delete-orphan")
     savers = db.relationship("User", secondary=saved_recipes, lazy="dynamic",
                              backref=db.backref("saved_recipes", lazy="dynamic"))
 

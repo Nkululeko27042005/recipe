@@ -14,7 +14,7 @@ def get_user(user_id):
     return ok(user.to_dict(include_stats=True))
 
 
-@users_bp.put("/me")
+@users_bp.route("/me", methods=["PUT", "POST"])
 @login_required_json
 def update_me():
     data = request.get_json(silent=True) or request.form
@@ -40,7 +40,7 @@ def update_me():
     return ok(user.to_dict(include_stats=True), "Updated")
 
 
-@users_bp.put("/me/preferences")
+@users_bp.route("/me/preferences", methods=["PUT", "POST"])
 @login_required_json
 def update_preferences():
     data = request.get_json(silent=True) or {}

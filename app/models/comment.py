@@ -14,6 +14,7 @@ class Comment(db.Model):
 
     replies = db.relationship("Comment", backref=db.backref("parent", remote_side=[id]),
                               lazy="dynamic", cascade="all, delete-orphan")
+    notifications = db.relationship("Notification", back_populates="comment", cascade="all, delete-orphan")
 
     def to_dict(self, include_replies=False):
         data = {

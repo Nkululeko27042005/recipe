@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Search by Ingredients — RecipE{% endblock %}
+
+{% block content %}
+<div class="chapter"><h1>What's in Your Kitchen?</h1></div>
+
+<form class="filters row" method="get" action="{{ url_for('recipes.by_ingredients_page') }}">
+  <input type="text" name="ingredients" placeholder="tomato, basil, garlic"
+         value="{{ raw }}" />
+  <button class="btn btn--primary" type="submit">Find Recipes</button>
+</form>
+
+{% if terms %}
+  <p class="muted mt-2">Showing recipes that use <strong>all</strong> of: {{ terms|join(", ") }}</p>
+
+  <div class="grid grid--3 mt-2">
+    {% for r in recipes %}
+      {% set variant = ["crimson","forest","plum","teal","mustard"][loop.index0 % 5] %}
+      {% include "partials/_recipe_card.html" with context %}
+    {% else %}
+      <p class="muted">No recipes matched. Try fewer or more common ingredients.</p>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endblock %}

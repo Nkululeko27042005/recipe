@@ -36,6 +36,8 @@ def list_recipes():
 @recipes_bp.get("/<int:recipe_id>")
 def get_recipe(recipe_id):
     recipe = Recipe.query.get_or_404(recipe_id)
+    if not request.is_json and "text/html" in request.headers.get("Accept", ""):
+        return redirect(url_for("recipes.recipe_page", recipe_id=recipe.id))
     uid = current_user.id if current_user.is_authenticated else None
     return ok(recipe.to_dict(detailed=True, current_user_id=uid))
 
@@ -67,7 +69,7 @@ def create_recipe():
                    "Recipe created")
 
 
-@recipes_bp.put("/<int:recipe_id>")
+@recipes_bp.route("/<int:recipe_id>", methods=["PUT", "POST"])
 @login_required_json
 def update_recipe(recipe_id):
     recipe = Recipe.query.get_or_404(recipe_id)
@@ -94,6 +96,15 @@ def update_recipe(recipe_id):
 
     recipe = RecipeService.update_recipe(recipe, data, new_images, new_video, remove_ids)
     return ok(recipe.to_dict(detailed=True, current_user_id=current_user.id), "Updated")
+
+
+# Alias endpoint for backwards/template compatibility
+recipes_bp.add_url_rule(
+    "/<int:recipe_id>",
+    endpoint="edit_recipe",
+    view_func=update_recipe,
+    methods=["PUT", "POST"]
+)
 
 
 @recipes_bp.delete("/<int:recipe_id>")
@@ -171,3 +182,16 @@ def edit_recipe_page(recipe_id):
     if recipe.user_id != current_user.id:
         abort(403)
     return render_template("recipe_form.html", recipe=recipe)
+
+@recipes_bp.get("/by-ingredients")
+def by_ingredients_page():
+    raw = request.args.get("ingredients", "").strip()
+    terms = [t.strip() for t in raw.split(",") if t.strip()]
+    results = RecipeService.search_by_ingredients(terms) if terms else []
+    return render_template("recipes_by_ingredients.html",
+                           terms=terms, recipes=results, raw=raw)
+
+@recipes_bp.get("/<int:recipe_id>/print")
+def print_recipe(recipe_id):
+    recipe = Recipe.query.get_or_404(recipe_id)
+    return render_template("recipe_print.html", recipe=recipe)

@@ -74,7 +74,7 @@ def create_app(config_class=Config):
 
     @app.cli.command("init-db")
     def init_db_command():
-        """Create all tables (dev shortcut — prefer flask db upgrade)."""
+        """Create all tables (dev shortcut; prefer flask db upgrade)."""
         db.create_all()
         click.echo("✓ Tables created")
 

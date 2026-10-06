@@ -1,5 +1,5 @@
 /* ============================================================
-   RecipE — Frontend interactions
+   RecipE: Frontend interactions
    - Like / Dislike / Save (AJAX)
    - Follow / Unfollow
    - Comment post / reply / delete
@@ -223,7 +223,7 @@
 
     list.innerHTML = comments.length
       ? comments.map(renderComment).join("")
-      : '<p class="muted">No comments yet — be the first.</p>';
+      : '<p class="muted">No comments yet. Be the first to comment.</p>';
   }
 
   function renderComment(c) {
@@ -275,7 +275,7 @@
     setTimeout(() => (window.location.href = "/"), 700);
   });
 
-  /* -------------------- Recipe Form — Dynamic Lists -------------------- */
+  /* -------------------- Recipe Form: Dynamic Lists -------------------- */
   document.addEventListener("click", (e) => {
     const addBtn = e.target.closest("[data-add-row]");
     if (addBtn) {

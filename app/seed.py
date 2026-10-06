@@ -2,7 +2,7 @@
 Seed the RecipE database with sample users, recipes, reactions, comments, follows.
 
 Usage:
-    flask seed          (via CLI — see app/__init__.py registration)
+    flask seed          (via CLI: see app/__init__.py registration)
     python -m app.seed  (direct run)
 """
 import random
@@ -158,7 +158,7 @@ SEED_RECIPES = [
     {
         "title": "Molten Chocolate Cake",
         "category": "Desserts",
-        "description": "Crisp outside, liquid centre — a ten-minute miracle.",
+        "description": "Crisp outside, warm chocolate inside. Ready in ten minutes.",
         "author": "chef_elena",
         "ingredients": [
             {"name": "Dark chocolate", "quantity": "200", "unit": "g"},
@@ -198,7 +198,7 @@ SEED_RECIPES = [
     {
         "title": "Avocado Grapefruit Salad",
         "category": "Salads",
-        "description": "A bright, buttery, tangy plate — three ingredients, one dressing.",
+        "description": "Bright, buttery, and tangy plate with three ingredients and one dressing.",
         "author": "greenfork",
         "ingredients": [
             {"name": "Avocado", "quantity": "2", "unit": "whole"},
@@ -218,10 +218,10 @@ SEED_RECIPES = [
 
 
 SEED_COMMENTS = [
-    "Made this tonight — the whole family loved it!",
+    "Made this tonight, the whole family loved it!",
     "Subbed the dairy and it still worked beautifully.",
     "This is going straight into my weeknight rotation.",
-    "Thank you for the clear steps — first time went perfectly.",
+    "Thank you for the clear steps, first time went perfectly.",
     "I added a bit of chilli and it was divine.",
     "Saved! Can't wait to try it this weekend.",
     "The flavour balance here is spot on.",
@@ -236,7 +236,7 @@ def _backdate(days=0, hours=0):
 def seed():
     print("🌱 Seeding RecipE database...")
 
-    # Clean slate (safe for dev) — delete in dependency order
+    # Clean slate (safe for dev): delete in dependency order
     db.session.query(Notification).delete()
     db.session.query(Reaction).delete()
     db.session.query(Comment).delete()
@@ -371,7 +371,7 @@ def seed():
                 recipe_id=recipe.id,
                 user_id=replier.id,
                 parent_id=parent_ids[0],
-                body="Totally agree — thanks for the tip!",
+                body="Totally agree, thanks for the tip!",
                 created_at=_backdate(days=random.randint(0, 5)),
             ))
             comment_count += 1

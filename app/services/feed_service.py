@@ -41,7 +41,7 @@ class FeedService:
                 .order_by(Recipe.created_at.desc()).all())
 
     # ------------------------------------------------------------------ #
-    #  Recipes — rankings                                                  #
+    #  Recipes: rankings                                                   #
     # ------------------------------------------------------------------ #
 
     @staticmethod
@@ -176,7 +176,7 @@ class FeedService:
                 .limit(limit).all())
 
     # ------------------------------------------------------------------ #
-    #  Users — rankings                                                    #
+    #  Users: rankings                                                     #
     # ------------------------------------------------------------------ #
 
     @staticmethod

@@ -1,6 +1,6 @@
-# RecipE 📖
+# RecipE
 
-> A book-themed recipe sharing platform built with Flask — discover, write, like, save, and share recipes with a community of cooks.
+> A recipe sharing platform built with Flask to discover, write, like, save, and share recipes with a community of cooks.
 
 ---
 
@@ -27,45 +27,45 @@
 
 ## Overview
 
-**RecipE** is a full-stack web application that lets users write and publish recipes, interact with other cooks through likes, comments, and follows, and discover content through a rich, personalised dashboard. The UI uses a warm book/bookshelf aesthetic with hand-crafted CSS — no external UI frameworks.
+**RecipE** is a full-stack web application that lets users write and publish recipes, interact with other cooks through likes, comments, and follows, and discover content through a dashboard. The UI uses a book-inspired aesthetic with custom CSS without external UI frameworks.
 
 ---
 
 ## Features
 
 ### Recipes
-- Create, edit, and delete recipes with a rich form
+- Create, edit, and delete recipes with a full form
 - Attach multiple **images** and an optional **video**
 - Structured **ingredients** (name, quantity, unit, weight, notes) and numbered **steps**
-- Browse & search recipes by title or category with pagination
+- Browse and search recipes by title or category with pagination
 - **Save** recipes to a personal cookbook
 
 ### Users & Social
-- Register / login with hashed passwords (bcrypt)
+- Register and login with hashed passwords (bcrypt)
 - Upload and update a **profile picture**
-- Write a **bio** and set food preferences (categories & dietary)
-- **Follow / unfollow** other cooks
+- Write a **bio** and set food preferences (categories and dietary)
+- **Follow and unfollow** other cooks
 - View any user's public profile with their recipe list and stats
 
 ### Interactions
-- **Like / Dislike** recipes (one reaction per user, toggleable)
+- **Like and Dislike** recipes (one reaction per user, toggleable)
 - **Comment** on recipes with nested reply support
 - **Save** recipes to revisit later
 
 ### Discovery Dashboard
 | Section | Description |
 |---|---|
-| 🏆 All-Time Legend | Single most famous recipe (weighted: likes ×3, saves ×2, comments ×1) |
-| 🔥 Recipe of the Month | Most interacted recipe since the 1st of the current month |
-| Recommended For You | Personalised by preferences + followed cooks |
+| All-Time Legend | Single most popular recipe (weighted: likes * 3, saves * 2, comments * 1) |
+| Recipe of the Month | Most interacted recipe since the 1st of the current month |
+| Recommended For You | Personalised by preferences and followed cooks |
 | Your Recipes | Your own published recipes |
 | Saved | Your bookmarked recipes |
 | The Main Shelf | Latest recipes from all cooks |
-| ✨ Fresh This Week | Recipes published in the last 7 days |
-| Top Liked | All-time most liked recipes (≥1 like required) |
-| 🔖 Most Saved | Recipes bookmarked by the most users |
-| 📅 This Month's Top Cooks | Ranked podium by interaction score (likes ×3, comments ×2, saves ×1) |
-| 📈 Rising Cooks | Cooks who gained the most followers in the last 30 days |
+| Fresh This Week | Recipes published in the last 7 days |
+| Top Liked | All-time most liked recipes (>= 1 like required) |
+| Most Saved | Recipes bookmarked by the most users |
+| This Month's Top Cooks | Ranked podium by interaction score (likes * 3, comments * 2, saves * 1) |
+| Rising Cooks | Cooks who gained the most followers in the last 30 days |
 
 ---
 
@@ -76,7 +76,7 @@
 | **Backend** | Python 3, Flask 3 |
 | **ORM** | Flask-SQLAlchemy + Flask-Migrate (Alembic) |
 | **Auth** | Flask-Login + Flask-Bcrypt |
-| **Database** | SQLite (dev) — swappable via `DATABASE_URL` |
+| **Database** | SQLite (dev), swappable via `DATABASE_URL` |
 | **Templates** | Jinja2 |
 | **Frontend** | Vanilla JS (no frameworks), custom CSS |
 | **Fonts** | Playfair Display + Crimson Text (Google Fonts) |
@@ -109,13 +109,13 @@ recipe/
     │   └── follow.py        # Follow
     │
     ├── routes/
-    │   ├── auth.py          # /auth  — register, login, logout, /me
-    │   ├── users.py         # /users — profile, settings, update, search
-    │   ├── recipes.py       # /recipes — CRUD, save/unsave, browse
-    │   ├── comments.py      # /comments — list, add, delete
-    │   ├── reactions.py     # /reactions — like, dislike
-    │   ├── follows.py       # /follows — follow, unfollow, followers, following
-    │   └── feed.py          # / — dashboard + JSON API endpoints
+    │   ├── auth.py          # /auth: register, login, logout, /me
+    │   ├── users.py         # /users: profile, settings, update, search
+    │   ├── recipes.py       # /recipes: CRUD, save/unsave, browse
+    │   ├── comments.py      # /comments: list, add, delete
+    │   ├── reactions.py     # /reactions: like, dislike
+    │   ├── follows.py       # /follows: follow, unfollow, followers, following
+    │   └── feed.py          # /: dashboard and JSON API endpoints
     │
     ├── services/
     │   ├── user_service.py
@@ -241,17 +241,17 @@ flask db upgrade
 2. Fill in the title, description, and category.
 3. Add **ingredients** (with quantity, unit, weight, and notes) and **steps** using the dynamic list builder.
 4. Attach one or more **photos** and an optional **video**.
-5. Submit — your recipe appears immediately on the shelf.
+5. Submit: your recipe appears immediately on the shelf.
 
 ### Interacting with Recipes
 
 | Action | How |
 |---|---|
-| ♥ Like | Click the heart button on any recipe card or detail page |
-| ✖ Dislike | Click the X button |
-| 🔖 Save | Click "Save to my cookbook" |
-| 💬 Comment | Use the comment form on the recipe detail page; reply to any comment |
-| 👤 Follow a cook | Visit their profile and click **Follow** |
+| Like | Click the heart button on any recipe card or detail page |
+| Dislike | Click the dislike button |
+| Save | Click "Save to my cookbook" |
+| Comment | Use the comment form on the recipe detail page; reply to any comment |
+| Follow a cook | Visit their profile and click **Follow** |
 
 ---
 
@@ -259,7 +259,7 @@ flask db upgrade
 
 All JSON endpoints return `{ "success": true/false, "data": ..., "message": "..." }`.
 
-### Auth — `/auth`
+### Auth (/auth)
 
 | Method | Path | Description |
 |---|---|---|
@@ -268,53 +268,53 @@ All JSON endpoints return `{ "success": true/false, "data": ..., "message": "...
 | `POST` | `/auth/logout` | Log out |
 | `GET` | `/auth/me` | Current user info |
 
-### Users — `/users`
+### Users (/users)
 
 | Method | Path | Auth | Description |
 |---|---|---|---|
-| `GET` | `/users/<id>` | — | Get a user by ID |
-| `PUT` | `/users/me` | ✓ | Update bio and/or profile picture (multipart) |
-| `GET` | `/users/me/preferences` | ✓ | Get preferences |
-| `PUT` | `/users/me/preferences` | ✓ | Update preferences |
-| `GET` | `/users/search?q=` | — | Search users by username |
+| `GET` | `/users/<id>` | No | Get a user by ID |
+| `PUT` | `/users/me` | Yes | Update bio and/or profile picture (multipart) |
+| `GET` | `/users/me/preferences` | Yes | Get preferences |
+| `PUT` | `/users/me/preferences` | Yes | Update preferences |
+| `GET` | `/users/search?q=` | No | Search users by username |
 
-### Recipes — `/recipes`
-
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| `GET` | `/recipes/` | — | List recipes (JSON, supports `?category=`, `?q=`, `?limit=`, `?offset=`) |
-| `GET` | `/recipes/<id>` | — | Get a single recipe (JSON, detailed) |
-| `POST` | `/recipes/` | ✓ | Create a recipe (JSON or multipart) |
-| `PUT` | `/recipes/<id>` | ✓ | Update a recipe |
-| `DELETE` | `/recipes/<id>` | ✓ | Delete a recipe |
-| `POST` | `/recipes/<id>/save` | ✓ | Save a recipe |
-| `DELETE` | `/recipes/<id>/save` | ✓ | Unsave a recipe |
-
-### Comments — `/comments`
+### Recipes (/recipes)
 
 | Method | Path | Auth | Description |
 |---|---|---|---|
-| `GET` | `/comments/recipe/<id>` | — | List comments for a recipe |
-| `POST` | `/comments/recipe/<id>` | ✓ | Add a comment (supports `parent_id` for replies) |
-| `DELETE` | `/comments/<id>` | ✓ | Delete own comment |
+| `GET` | `/recipes/` | No | List recipes (JSON, supports `?category=`, `?q=`, `?limit=`, `?offset=`) |
+| `GET` | `/recipes/<id>` | No | Get a single recipe (JSON, detailed) |
+| `POST` | `/recipes/` | Yes | Create a recipe (JSON or multipart) |
+| `PUT` | `/recipes/<id>` | Yes | Update a recipe |
+| `DELETE` | `/recipes/<id>` | Yes | Delete a recipe |
+| `POST` | `/recipes/<id>/save` | Yes | Save a recipe |
+| `DELETE` | `/recipes/<id>/save` | Yes | Unsave a recipe |
 
-### Reactions — `/reactions`
-
-| Method | Path | Auth | Description |
-|---|---|---|---|
-| `POST` | `/reactions/<recipe_id>/like` | ✓ | Like a recipe |
-| `POST` | `/reactions/<recipe_id>/dislike` | ✓ | Dislike a recipe |
-
-### Follows — `/follows`
+### Comments (/comments)
 
 | Method | Path | Auth | Description |
 |---|---|---|---|
-| `POST` | `/follows/<user_id>` | ✓ | Follow a user |
-| `DELETE` | `/follows/<user_id>` | ✓ | Unfollow a user |
-| `GET` | `/follows/<user_id>/followers` | — | List a user's followers |
-| `GET` | `/follows/<user_id>/following` | — | List who a user follows |
+| `GET` | `/comments/recipe/<id>` | No | List comments for a recipe |
+| `POST` | `/comments/recipe/<id>` | Yes | Add a comment (supports `parent_id` for replies) |
+| `DELETE` | `/comments/<id>` | Yes | Delete own comment |
 
-### Feed / Dashboard — `/api`
+### Reactions (/reactions)
+
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `POST` | `/reactions/<recipe_id>/like` | Yes | Like a recipe |
+| `POST` | `/reactions/<recipe_id>/dislike` | Yes | Dislike a recipe |
+
+### Follows (/follows)
+
+| Method | Path | Auth | Description |
+|---|---|---|---|
+| `POST` | `/follows/<user_id>` | Yes | Follow a user |
+| `DELETE` | `/follows/<user_id>` | Yes | Unfollow a user |
+| `GET` | `/follows/<user_id>/followers` | No | List a user's followers |
+| `GET` | `/follows/<user_id>/following` | No | List who a user follows |
+
+### Feed / Dashboard (/api)
 
 | Method | Path | Description |
 |---|---|---|
@@ -335,18 +335,18 @@ All JSON endpoints return `{ "success": true/false, "data": ..., "message": "...
 The dashboard uses several **ranking algorithms** powered by weighted interaction scores:
 
 ### Rising Cooks
-Users who gained the most **new followers in the last 30 days** — not simply those with the most followers overall. This surfaces momentum, not just popularity.
+Users who gained the most **new followers in the last 30 days**, not simply those with the most followers overall. This surfaces momentum, not just popularity.
 
 ### This Month's Top Cooks
 Weighted score across all recipes published by that cook, counting only interactions that happened this month:
 ```
-score = (likes × 3) + (comments × 2) + (saves × 1)
+score = (likes * 3) + (comments * 2) + (saves * 1)
 ```
 
 ### Most Famous Recipe (All-Time Legend)
 The single highest-scoring recipe across all time:
 ```
-score = (likes × 3) + (saves × 2) + (comments × 1)
+score = (likes * 3) + (saves * 2) + (comments * 1)
 ```
 
 ### Recipe of the Month
@@ -356,7 +356,7 @@ The recipe with the most total interactions (likes + comments + saves) since the
 
 ## File Uploads
 
-- **Images**: PNG, JPG, JPEG, GIF, WEBP — max 100 MB per request (default Flask limit)
+- **Images**: PNG, JPG, JPEG, GIF, WEBP (max 100 MB per request, default Flask limit)
 - **Videos**: MP4, WEBM, MOV
 - Files are stored locally in `app/static/uploads/` with a UUID prefix to avoid name collisions
 - Old profile pictures and recipe images are **deleted from disk** when replaced or removed
@@ -371,7 +371,7 @@ All settings live in [`config.py`](config.py) and can be overridden via `.env`:
 
 | Variable | Default | Description |
 |---|---|---|
-| `SECRET_KEY` | `dev-secret` | Flask session secret — **change in production** |
+| `SECRET_KEY` | `dev-secret` | Flask session secret (change in production) |
 | `DATABASE_URL` | `sqlite:///recipe.db` | SQLAlchemy database URI |
 | `UPLOAD_FOLDER` | `app/static/uploads` | Path for uploaded files |
 | `MAX_CONTENT_LENGTH` | `100 MB` | Maximum upload size |
@@ -385,5 +385,5 @@ All settings live in [`config.py`](config.py) and can be overridden via `.env`:
 1. Fork the repository and create a feature branch.
 2. Keep business logic in `services/`, HTTP concerns in `routes/`.
 3. Use `flask db migrate` for any model changes.
-4. Test file uploads manually — the test suite is not yet included.
+4. Test file uploads manually; automated test suite is not yet included.
 5. Open a pull request with a clear description of the change.

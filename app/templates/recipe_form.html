@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ "Edit" if recipe else "New" }} Recipe — RecipE{% endblock %}
+{% block title %}{{ "Edit" if recipe else "New" }} Recipe | RecipE{% endblock %}
 
 {% block content %}
 <div class="card card--crimson" style="max-width:900px;margin:2rem auto;">
@@ -73,7 +73,7 @@
     <label class="mt-2">Video (optional)</label>
     <input type="file" name="video" accept="video/*" />
     {% if recipe and recipe.video %}
-      <p class="muted">Current: {{ recipe.video.filename }} — uploading a new one replaces it.</p>
+      <p class="muted">Current: {{ recipe.video.filename }} (uploading a new one replaces it).</p>
     {% endif %}
 
     <button class="btn btn--primary mt-3" type="submit">

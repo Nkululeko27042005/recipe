@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}RecipE — The Shelf{% endblock %}
+{% block title %}RecipE | The Shelf{% endblock %}
 
 {% block content %}
 
@@ -42,7 +42,7 @@
             {% set variant = ["crimson","forest","plum","teal","mustard"][loop.index0 % 5] %}
             {% include "partials/_recipe_card.html" with context %}
           {% else %}
-            <p class="muted">No recommendations yet — follow some cooks or set preferences.</p>
+            <p class="muted">No recommendations yet. Follow some cooks or set preferences.</p>
           {% endfor %}
         </div>
       </section>
@@ -79,7 +79,7 @@
   {% endif %}
 
   {# ═══════════════════════════════════════════════════════════
-     SPOTLIGHT ROW — this month's hottest recipe
+     SPOTLIGHT ROW: this month's hottest recipe
      ═══════════════════════════════════════════════════════════ #}
   {% if most_interacted_this_month %}
     {% set r = most_interacted_this_month %}
@@ -152,7 +152,7 @@
           {% endfor %}
         </div>
       {% else %}
-        <p class="muted">No liked recipes yet — be the first to ♥ something!</p>
+        <p class="muted">No liked recipes yet. Like a recipe to see it here!</p>
       {% endif %}
     </section>
 

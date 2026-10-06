@@ -1,5 +1,5 @@
 /* =========================================================
-   RecipE — Vibrant Book Theme (Square Edges)
+   RecipE: Book Theme (Square Edges)
    ========================================================= */
 
 :root {
@@ -312,7 +312,7 @@ label {
 .square  { border-radius: 0 !important; }  /* enforce squareness everywhere */
 
 /* =========================================================
-   RecipE — Extended styles (frontend additions)
+   RecipE: Extended styles (frontend additions)
    ========================================================= */
 
 /* ---------- Mobile nav toggle ---------- */
@@ -583,7 +583,7 @@ label {
 }
 
 /* =========================================================
-   Dashboard — Redesigned Layout
+   Dashboard: Redesigned Layout
    ========================================================= */
 
 /* ---------- Hero banner ---------- */
@@ -689,7 +689,7 @@ label {
 }
 
 /* =========================================================
-   Dashboard — New Components
+   Dashboard: New Components
    ========================================================= */
 
 /* ---------- Single-column grid helper ---------- */
@@ -908,7 +908,7 @@ label {
 .admin-table tr:last-child td { border-bottom: none; }
 
 /* =========================================================
-   Dark mode — "Library at Night"
+   Dark mode: "Library at Night"
    ========================================================= */
 body.theme-dark {
   --paper:    #1a1510;

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}{{ recipe.title }} — RecipE{% endblock %}
+{% block title %}{{ recipe.title }} | RecipE{% endblock %}
 
 {% block content %}
 <article class="recipe-detail" data-recipe-id="{{ recipe.id }}">
@@ -27,7 +27,7 @@
       {% for img in recipe.images %}
         <figure class="card card--{{ 'crimson' if img.is_primary else 'mustard' }} gallery__item">
           <img src="{{ url_for('static', filename='uploads/' ~ img.filename) }}"
-               alt="{{ recipe.title }} — image {{ loop.index }}" loading="lazy">
+               alt="{{ recipe.title }} image {{ loop.index }}" loading="lazy">
         </figure>
       {% endfor %}
     </div>
@@ -123,7 +123,7 @@
     {% for c in comments %}
       {% include "partials/_comment.html" with context %}
     {% else %}
-      <p class="muted">No comments yet — be the first.</p>
+      <p class="muted">No comments yet. Be the first to comment.</p>
     {% endfor %}
   </div>
 

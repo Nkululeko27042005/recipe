@@ -364,9 +364,19 @@
     fd.append("steps", JSON.stringify(steps));
 
     // Images
-    form.querySelectorAll("[name='images']").forEach((inp) => {
-      Array.from(inp.files || []).forEach((f) => fd.append("images", f));
-    });
+    const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+    const MAX_VIDEO_BYTES = 100 * 1024 * 1024;
+
+    const imageInputs = form.querySelectorAll("[name='images']");
+    for (const inp of imageInputs) {
+      for (const file of Array.from(inp.files || [])) {
+        if (file.size > MAX_IMAGE_BYTES) {
+          const mb = (file.size / (1024 * 1024)).toFixed(1);
+          return toast(`Image "${file.name}" is ${mb} MB (max 5 MB allowed).`, "danger");
+        }
+        fd.append("images", file);
+      }
+    }
 
     // Removals
     form.querySelectorAll("[name='remove_image_ids[]']:checked").forEach((cb) => {
@@ -375,7 +385,14 @@
 
     // Video
     const videoInput = form.querySelector("[name='video']");
-    if (videoInput && videoInput.files[0]) fd.append("video", videoInput.files[0]);
+    if (videoInput && videoInput.files[0]) {
+      const vfile = videoInput.files[0];
+      if (vfile.size > MAX_VIDEO_BYTES) {
+        const mb = (vfile.size / (1024 * 1024)).toFixed(1);
+        return toast(`Video "${vfile.name}" is ${mb} MB (max 100 MB allowed).`, "danger");
+      }
+      fd.append("video", vfile);
+    }
 
     const url = form.getAttribute("action");
     const isEdit = /\/recipes\/\d+$/.test(url);
@@ -455,6 +472,11 @@ document.addEventListener("click", (e) => {
     if (e.target.id !== "avatar") return;
     const file = e.target.files[0];
     if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      toast(`Avatar image is ${(file.size / (1024 * 1024)).toFixed(1)} MB (max 5 MB allowed).`, "danger");
+      e.target.value = "";
+      return;
+    }
     const previewEl = $("#avatar-preview");
     if (!previewEl) return;
     const url = URL.createObjectURL(file);

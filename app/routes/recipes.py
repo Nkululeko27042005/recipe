@@ -64,7 +64,11 @@ def create_recipe():
     if not data.get("title"):
         return error("title is required", 422)
 
-    recipe = RecipeService.create_recipe(current_user, data, images, video)
+    try:
+        recipe = RecipeService.create_recipe(current_user, data, images, video)
+    except ValueError as e:
+        return error(str(e), 422)
+
     return created(recipe.to_dict(detailed=True, current_user_id=current_user.id),
                    "Recipe created")
 
@@ -94,7 +98,11 @@ def update_recipe(recipe_id):
         new_images = new_video = None
         remove_ids = None
 
-    recipe = RecipeService.update_recipe(recipe, data, new_images, new_video, remove_ids)
+    try:
+        recipe = RecipeService.update_recipe(recipe, data, new_images, new_video, remove_ids)
+    except ValueError as e:
+        return error(str(e), 422)
+
     return ok(recipe.to_dict(detailed=True, current_user_id=current_user.id), "Updated")
 
 

@@ -4,27 +4,29 @@
 {% block content %}
 <div class="chapter"><h1>Recipes</h1></div>
 
-<table class="admin-table">
-  <thead>
-    <tr><th>ID</th><th>Title</th><th>Author</th><th>Likes</th><th>Posted</th><th></th></tr>
-  </thead>
-  <tbody>
-    {% for r in recipes %}
-      <tr>
-        <td>{{ r.id }}</td>
-        <td><a href="{{ url_for('recipes.recipe_page', recipe_id=r.id) }}">{{ r.title }}</a></td>
-        <td>{{ r.author.username }}</td>
-        <td>{{ r.likes_count }}</td>
-        <td>{{ r.created_at.strftime("%Y-%m-%d") }}</td>
-        <td>
-          <form method="post"
-                action="{{ url_for('admin.delete_recipe', recipe_id=r.id) }}"
-                onsubmit="return confirm('Delete this recipe?');">
-            <button class="btn btn--sm btn--danger" type="submit">Delete</button>
-          </form>
-        </td>
-      </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<div class="table-responsive">
+  <table class="admin-table">
+    <thead>
+      <tr><th>ID</th><th>Title</th><th>Author</th><th>Likes</th><th>Posted</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for r in recipes %}
+        <tr>
+          <td>{{ r.id }}</td>
+          <td><a href="{{ url_for('recipes.recipe_page', recipe_id=r.id) }}">{{ r.title }}</a></td>
+          <td>{{ r.author.username }}</td>
+          <td>{{ r.likes_count }}</td>
+          <td>{{ r.created_at.strftime("%Y-%m-%d") }}</td>
+          <td>
+            <form method="post"
+                  action="{{ url_for('admin.delete_recipe', recipe_id=r.id) }}"
+                  onsubmit="return confirm('Delete this recipe?');">
+              <button class="btn btn--sm btn--danger" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

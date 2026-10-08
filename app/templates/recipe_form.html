@@ -52,8 +52,8 @@
     <button type="button" class="btn btn--sm btn--ghost" data-add-row="steps">+ Add Step</button>
 
     <!-- IMAGES -->
-    <label class="mt-2">Images</label>
-    <input type="file" name="images" accept="image/*" multiple />
+    <label class="mt-2" for="images-input">Images (PNG, JPG, WEBP, GIF · max 5 MB each)</label>
+    <input type="file" id="images-input" name="images" accept="image/png,image/jpeg,image/webp,image/gif" multiple />
     {% if recipe and recipe.images %}
       <div class="existing-images grid grid--3 mt-1">
         {% for img in recipe.images %}
@@ -70,8 +70,8 @@
     {% endif %}
 
     <!-- VIDEO -->
-    <label class="mt-2">Video (optional)</label>
-    <input type="file" name="video" accept="video/*" />
+    <label class="mt-2" for="video-input">Video (optional · MP4, WEBM, MOV · max 100 MB)</label>
+    <input type="file" id="video-input" name="video" accept="video/mp4,video/webm,video/quicktime" />
     {% if recipe and recipe.video %}
       <p class="muted">Current: {{ recipe.video.filename }} (uploading a new one replaces it).</p>
     {% endif %}

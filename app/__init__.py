@@ -51,6 +51,16 @@ def create_app(config_class=Config):
     def forbidden(e):
         return render_template("errors/404.html"), 403
 
+    @app.errorhandler(413)
+    def request_entity_too_large(e):
+        from flask import request, jsonify
+        msg = "The uploaded file or request exceeds the maximum allowed size (100 MB)."
+        if request.is_json or request.path.startswith("/api") or "application/json" in request.headers.get("Accept", ""):
+            return jsonify({"success": False, "message": msg, "data": None}), 413
+        from flask import flash, redirect
+        flash(msg, "danger")
+        return redirect(request.referrer or "/")
+
     # ---------- Template filters ----------
     @app.template_filter("timeago")
     def timeago(dt):

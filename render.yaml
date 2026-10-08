@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: recipe-app
+    env: python
+    buildCommand: ./build.sh
+    startCommand: gunicorn "run:app" --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SECRET_KEY
+        generateValue: true
+      - key: FLASK_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: recipe-db
+          property: connectionString
+
+databases:
+  - name: recipe-db
+    databaseName: recipe_db
+    user: recipe_user
+    plan: free

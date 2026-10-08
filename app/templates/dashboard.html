@@ -84,7 +84,7 @@
   {% if most_interacted_this_month %}
     {% set r = most_interacted_this_month %}
     <div class="chapter"><h2>🔥 Recipe of the Month</h2></div>
-    <div class="spotlight-card">
+    <div class="spotlight-card{% if not r.images %} spotlight-card--no-thumb{% endif %}">
       {% if r.images %}
         {% set primary = r.images|selectattr('is_primary')|first or r.images[0] %}
         <div class="spotlight-card__thumb">

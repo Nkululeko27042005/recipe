@@ -6,11 +6,17 @@ load_dotenv()
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
-    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL", "sqlite:///recipe.db")
+    
+    # Render and modern cloud hosts provide DATABASE_URL starting with postgres://
+    # SQLAlchemy requires postgresql://
+    _db_url = os.getenv("DATABASE_URL", "sqlite:///recipe.db")
+    if _db_url.startswith("postgres://"):
+        _db_url = _db_url.replace("postgres://", "postgresql://", 1)
+    SQLALCHEMY_DATABASE_URI = _db_url
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", "app/static/uploads")
-    MAX_CONTENT_LENGTH = 100 * 1024 * 1024  # 100 MB
+    UPLOAD_FOLDER = os.getenv("UPLOAD_FOLDER", os.path.join(os.path.dirname(__file__), "app", "static", "uploads"))
+    MAX_CONTENT_LENGTH = int(os.getenv("MAX_CONTENT_LENGTH", 100 * 1024 * 1024))  # 100 MB default
 
     ALLOWED_IMAGE_EXT = {"png", "jpg", "jpeg", "gif", "webp"}
     ALLOWED_VIDEO_EXT = {"mp4", "webm", "mov"}

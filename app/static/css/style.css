@@ -67,6 +67,8 @@ a:hover { color: var(--plum); }
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 .site-header .brand {
   font-family: "Playfair Display", serif;
@@ -75,17 +77,28 @@ a:hover { color: var(--plum); }
   color: var(--paper);
   text-decoration: none;
   letter-spacing: 1px;
+  line-height: 1;
 }
 .site-header .brand::before {
   content: "❦ ";   /* fleuron / book ornament */
   color: var(--mustard);
 }
+.site-nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+}
 .site-nav a {
   color: var(--paper);
-  margin-left: 1rem;
   text-decoration: none;
   border: 2px solid transparent;
-  padding: .25rem .5rem;
+  padding: .3rem .55rem;
+  font-weight: 700;
+  font-size: .95rem;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
 }
 .site-nav a:hover {
   background: var(--mustard);
@@ -101,6 +114,8 @@ a:hover { color: var(--plum); }
   padding: 1.25rem 1.25rem 1.25rem 1.75rem;
   margin-bottom: 1.5rem;
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
 /* page spine on the left of every card */
 .card::before {
@@ -229,6 +244,18 @@ label {
 }
 .ingredients li .qty { font-weight: 700; color: var(--crimson); }
 
+.card__title {
+  margin-top: 0;
+  margin-bottom: .4rem;
+}
+.card__desc {
+  flex-grow: 1;
+}
+.card__meta {
+  margin-top: auto;
+  padding-top: .5rem;
+}
+
 /* ---------- Like / Dislike / Save buttons ---------- */
 .action-bar {
   display: flex;
@@ -237,6 +264,7 @@ label {
   margin-top: .75rem;
   border-top: 2px solid var(--line);
   padding-top: .75rem;
+  flex-wrap: wrap;
 }
 .action-bar .count {
   font-weight: 700;
@@ -330,8 +358,19 @@ label {
   .site-nav {
     display: none;
     flex-direction: column;
+    align-items: stretch;
     width: 100%;
     margin-top: .75rem;
+    gap: .4rem;
+  }
+  .site-nav a, .site-nav form, .site-nav .btn {
+    width: 100%;
+    text-align: left;
+    justify-content: flex-start;
+  }
+  .site-nav form button {
+    width: 100%;
+    text-align: center;
   }
   .site-nav--open { display: flex; }
 }
@@ -413,15 +452,26 @@ label {
 .dynamic-row {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr 1fr 1.5fr auto;
-  gap: .4rem;
-  margin-bottom: .5rem;
-  align-items: start;
+  gap: .5rem;
+  margin-bottom: .6rem;
+  align-items: center;
+}
+.dynamic-row input,
+.dynamic-row textarea {
+  margin: 0;
 }
 .dynamic-list[data-list='steps'] .dynamic-row {
   grid-template-columns: 1fr auto;
+  align-items: stretch;
 }
 @media (max-width: 720px) {
-  .dynamic-row { grid-template-columns: 1fr 1fr; }
+  .dynamic-row {
+    grid-template-columns: 1fr 1fr;
+    align-items: stretch;
+  }
+  .dynamic-row [data-remove-row] {
+    grid-column: 1 / -1;
+  }
 }
 
 /* Steps edit list gets numbered "Step N" labels via CSS counter */
@@ -481,7 +531,19 @@ label {
 .comment-body { white-space: pre-wrap; word-wrap: break-word; }
 
 /* ---------- Filters ---------- */
-.filters input { flex: 1; min-width: 160px; }
+.filters {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.filters input {
+  flex: 1 1 200px;
+  min-width: 160px;
+}
+.filters .btn {
+  white-space: nowrap;
+}
 
 /* ---------- Pagination ---------- */
 .pagination { justify-content: center; gap: .75rem; }
@@ -505,7 +567,15 @@ label {
   font-weight: 900;
   font-family: "Playfair Display", serif;
 }
-.profile-card { padding-left: 1.75rem; }
+.profile-card {
+  padding-left: 1.75rem;
+}
+.profile-card .row {
+  align-items: center;
+}
+.profile-avatar {
+  flex-shrink: 0;
+}
 
 /* ---------- Avatar upload (settings) ---------- */
 .avatar-upload {
@@ -660,11 +730,13 @@ label {
   margin-bottom: .3rem;
 }
 .rising-user__link:hover { color: var(--crimson); }
-.rising-user__avatar {
+.rising-user__avatar,
+.rising-user .avatar-placeholder--sm {
   width: 32px;
   height: 32px;
   object-fit: cover;
   border: 2px solid var(--line);
+  flex-shrink: 0;
 }
 .rising-user__stats { display: flex; gap: .35rem; flex-wrap: wrap; }
 
@@ -720,7 +792,6 @@ label {
   text-underline-offset: 3px;
 }
 
-/* ---------- Spotlight card (Recipe of the Month) ---------- */
 .spotlight-card {
   display: grid;
   grid-template-columns: 340px 1fr;
@@ -732,6 +803,12 @@ label {
   position: relative;
   overflow: hidden;
 }
+.spotlight-card:not(:has(.spotlight-card__thumb)) {
+  grid-template-columns: 1fr;
+}
+.spotlight-card--no-thumb {
+  grid-template-columns: 1fr;
+}
 .spotlight-card::before {
   content: "";
   position: absolute;
@@ -739,6 +816,7 @@ label {
   width: 12px;
   background: var(--crimson);
   border-right: 2px solid var(--line);
+  z-index: 2;
 }
 .spotlight-card__thumb {
   border-right: 3px solid var(--line);
@@ -807,11 +885,13 @@ label {
   text-align: center;
 }
 .cook-card__avatar-link { flex-shrink: 0; }
-.cook-card__avatar {
+.cook-card__avatar,
+.cook-card .avatar-placeholder--sm {
   width: 44px;
   height: 44px;
   object-fit: cover;
   border: 2px solid var(--line);
+  font-size: 1.2rem;
 }
 .cook-card__info { flex: 1; min-width: 0; }
 .cook-card__info a { color: var(--ink); text-decoration: none; }
@@ -887,6 +967,12 @@ label {
   font-family: "Playfair Display", serif;
   margin: 0;
 }
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1.5rem;
+}
 .admin-table {
   width: 100%;
   border-collapse: collapse;
@@ -894,9 +980,10 @@ label {
   border: 3px solid var(--line);
 }
 .admin-table th, .admin-table td {
-  padding: .5rem .75rem;
+  padding: .65rem .85rem;
   border-bottom: 2px solid var(--line);
   text-align: left;
+  vertical-align: middle;
 }
 .admin-table th {
   background: var(--crimson);
@@ -904,8 +991,13 @@ label {
   letter-spacing: 1px;
   text-transform: uppercase;
   font-size: .85rem;
+  white-space: nowrap;
 }
 .admin-table tr:last-child td { border-bottom: none; }
+.admin-table form {
+  margin: 0;
+  display: inline-block;
+}
 
 /* =========================================================
    Dark mode: "Library at Night"
